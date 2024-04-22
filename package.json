@@ -9,5 +9,20 @@
         "axios": "^1.6.4",
         "laravel-vite-plugin": "^1.0.0",
         "vite": "^5.0.0"
+    },
+    "name": "ReleaseNexus",
+    "version": "1.0.0",
+    "description": "App to track video game, movies, and TV shows release dates.",
+    "main": "index.js",
+    "repository": "https://github.com/pogorskii/releasenexus.git",
+    "author": "Stanislav Pogorskii",
+    "license": "MIT",
+    "dependencies": {
+        "@inertiajs/inertia": "^0.11.1",
+        "@inertiajs/inertia-vue3": "^0.6.0",
+        "@tailwindcss/vite": "^4.0.0-alpha.14",
+        "@vitejs/plugin-vue": "^5.0.4",
+        "tailwindcss": "^4.0.0-alpha.14",
+        "vue": "^3.4.23"
     }
 }
