@@ -1,10 +1,10 @@
 import "./bootstrap";
 import "../css/app.css";
 
-import {createApp, h} from "vue";
+import {createSSRApp, h} from 'vue'
 import {createInertiaApp} from "@inertiajs/inertia-vue3";
 import {resolvePageComponent} from "laravel-vite-plugin/inertia-helpers";
-import Plugins from "./Plugins/index.js";
+import Plugins from "./Plugins";
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
@@ -14,9 +14,10 @@ createInertiaApp({
             import.meta.glob("./Pages/**/*.vue")
         ),
     setup({el, app, props, plugin}) {
-        return createApp({render: () => h(app, props)})
+        return createSSRApp({render: () => h(app, props)})
             .use(plugin)
             .use(Plugins)
             .mount(el);
     },
+}).then(r => {
 });
