@@ -3,12 +3,20 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build && vite build --ssr"
+        "build": "vue-tsc && vite build && vite build --ssr && vite build && vite build --ssr --ssr && vite build && vite build --ssr && vite build && vite build --ssr --ssr --ssr && vite build && vite build --ssr && vite build && vite build --ssr --ssr && vite build && vite build --ssr && vite build && vite build --ssr --ssr --ssr --ssr && vite build && vite build --ssr && vite build && vite build --ssr --ssr && vite build && vite build --ssr && vite build && vite build --ssr --ssr --ssr && vite build && vite build --ssr && vite build && vite build --ssr --ssr && vite build && vite build --ssr && vite build && vite build --ssr --ssr --ssr --ssr --ssr"
     },
     "devDependencies": {
+        "@inertiajs/vue3": "^1.0.0",
+        "@vitejs/plugin-vue": "^5.0.0",
+        "@vue/server-renderer": "^3.4.0",
+        "autoprefixer": "^10.4.12",
         "axios": "^1.6.4",
         "laravel-vite-plugin": "^1.0.0",
-        "vite": "^5.0.0"
+        "postcss": "^8.4.31",
+        "typescript": "^5.0.2",
+        "vite": "^5.0.0",
+        "vue": "^3.4.0",
+        "vue-tsc": "^1.8.27"
     },
     "name": "ReleaseNexus",
     "version": "1.0.0",
@@ -21,10 +29,11 @@
         "@inertiajs/inertia": "^0.11.1",
         "@inertiajs/inertia-vue3": "^0.6.0",
         "@inertiajs/vue3": "^1.1.0",
-        "@tailwindcss/vite": "^4.0.0-alpha.14",
+        "@tailwindcss/postcss": "^4.0.0-alpha.15",
+        "@tailwindcss/vite": "^4.0.0-alpha.15",
         "@vitejs/plugin-vue": "^5.0.4",
         "@vue/server-renderer": "^3.4.27",
-        "tailwindcss": "^4.0.0-alpha.14",
+        "tailwindcss": "^4.0.0-alpha.15",
         "vue": "^3.4.23",
         "ziggy-js": "^2.2.1"
     }

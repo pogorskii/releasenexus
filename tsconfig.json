@@ -1,34 +1,20 @@
 {
     "compilerOptions": {
         "allowJs": true,
-        "target": "esnext",
-        "module": "esnext",
-        "moduleResolution": "node",
-        "strict": true,
+        "module": "ESNext",
+        "moduleResolution": "bundler",
         "jsx": "preserve",
-        "sourceMap": true,
-        "resolveJsonModule": true,
+        "strict": true,
+        "isolatedModules": true,
+        "target": "ESNext",
         "esModuleInterop": true,
-        "lib": [
-            "esnext",
-            "dom"
-        ],
-        "types": [
-            "vite/client"
-        ],
-        "baseUrl": ".",
+        "forceConsistentCasingInFileNames": true,
+        "noEmit": true,
+        "skipLibCheck": true,
         "paths": {
-            "@/*": [
-                "resources/*"
-            ],
-            "ziggy-js": [
-                "./vendor/tightenco/ziggy"
-            ]
+            "@/*": ["./resources/js/*"],
+            "ziggy-js": ["./vendor/tightenco/ziggy"]
         }
     },
-    "include": [
-        "resources/**/*",
-        "node_modules/laravel-echo/typings/index.d.ts",
-        "node_modules/laravel-echo/typings/index.d.ts"
-    ]
+    "include": ["resources/js/**/*.ts", "resources/js/**/*.d.ts", "resources/js/**/*.vue"]
 }

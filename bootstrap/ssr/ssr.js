@@ -1,56 +1,17 @@
-import { defineComponent, unref, useSSRContext, mergeProps, createSSRApp, h as h$1 } from "vue";
-import { ssrRenderAttrs, ssrRenderDynamicModel, ssrRenderAttr } from "vue/server-renderer";
-import { useForm } from "@inertiajs/vue3";
-import { createInertiaApp } from "@inertiajs/inertia-vue3";
-import createServer from "@inertiajs/vue3/server";
+import { createSSRApp, h as h$1 } from "vue";
 import { renderToString } from "@vue/server-renderer";
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
-  __name: "Login",
-  __ssrInlineRender: true,
-  setup(__props) {
-    const loginForm = useForm({
-      email: null,
-      password: null,
-      loginMethod: "email",
-      remember: true
-    });
-    return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(_attrs)}><h1>Please log in</h1><form><div class="mb-4 mb-6 flex items-center rounded-full border bg-transparent"><input${ssrRenderDynamicModel(unref(loginForm).loginMethod === "phone" ? "text" : "email", unref(loginForm).email, null)}${ssrRenderAttr("placeholder", unref(loginForm).loginMethod === "phone" ? "Phone number" : "Email address")}${ssrRenderAttr("type", unref(loginForm).loginMethod === "phone" ? "text" : "email")} class="grow rounded-r-full bg-transparent px-1 py-4 placeholder-zinc-400 focus:outline-none" name="email"></div><div class="mb-12 flex items-center rounded-full border bg-transparent"><input${ssrRenderAttr("value", unref(loginForm).password)} class="grow rounded-r-full bg-transparent px-2 py-4 placeholder-zinc-400 focus:outline-none" name="password" placeholder="Password" type="password"></div><div class="mb-4 flex justify-center"><button class="block w-full shrink grow bg-ph-teal-600 px-16 py-3 text-lg font-semibold uppercase shadow hover:bg-ph-teal-500" type="submit"> Log In </button></div></form></div>`);
-    };
+import { createInertiaApp } from "@inertiajs/vue3";
+import createServer from "@inertiajs/vue3/server";
+async function resolvePageComponent(path, pages) {
+  for (const p2 of Array.isArray(path) ? path : [path]) {
+    const page = pages[p2];
+    if (typeof page === "undefined") {
+      continue;
+    }
+    return typeof page === "function" ? page() : page;
   }
-});
-const _sfc_setup$1 = _sfc_main$1.setup;
-_sfc_main$1.setup = (props, ctx) => {
-  const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/Pages/Auth/Login.vue");
-  return _sfc_setup$1 ? _sfc_setup$1(props, ctx) : void 0;
-};
-const __vite_glob_0_0 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  default: _sfc_main$1
-}, Symbol.toStringTag, { value: "Module" }));
-const _export_sfc = (sfc, props) => {
-  const target = sfc.__vccOpts || sfc;
-  for (const [key, val] of props) {
-    target[key] = val;
-  }
-  return target;
-};
-const _sfc_main = {};
-function _sfc_ssrRender(_ctx, _push, _parent, _attrs) {
-  _push(`<div${ssrRenderAttrs(mergeProps({ class: "w-full h-screen flex flex-col text-center justify-center bg-slate-900 text-slate-50" }, _attrs))}><h1 class="mb-4 text-8xl font-bold">ReleaseNexus</h1><p class="text-2xl">Coming very soon...</p></div>`);
+  throw new Error(`Page not found: ${path}`);
 }
-const _sfc_setup = _sfc_main.setup;
-_sfc_main.setup = (props, ctx) => {
-  const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/Pages/Home.vue");
-  return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
-};
-const Home = /* @__PURE__ */ _export_sfc(_sfc_main, [["ssrRender", _sfc_ssrRender]]);
-const __vite_glob_0_1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-  __proto__: null,
-  default: Home
-}, Symbol.toStringTag, { value: "Module" }));
 function t() {
   return t = Object.assign ? Object.assign.bind() : function(t4) {
     for (var e2 = 1; e2 < arguments.length; e2++) {
@@ -416,18 +377,18 @@ const k = { install(t4, e2) {
   const r2 = (t5, r3, n2, o2 = e2) => T(t5, r3, n2, o2);
   parseInt(t4.version) > 2 ? (t4.config.globalProperties.route = r2, t4.provide("route", r2)) : t4.mixin({ methods: { route: r2 } });
 } };
+const appName = "Laravel";
 createServer(
   (page) => createInertiaApp({
     page,
     render: renderToString,
-    resolve: (name) => {
-      const pages = /* @__PURE__ */ Object.assign({ "./Pages/Auth/Login.vue": __vite_glob_0_0, "./Pages/Home.vue": __vite_glob_0_1 });
-      return pages[`./Pages/${name}.vue`];
-    },
+    title: (title) => `${title} - ${appName}`,
+    resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, /* @__PURE__ */ Object.assign({ "./Pages/Auth/ConfirmPassword.vue": () => import("./assets/ConfirmPassword-DHspj_qB.js"), "./Pages/Auth/ForgotPassword.vue": () => import("./assets/ForgotPassword-Mjv2LGAH.js"), "./Pages/Auth/Login.vue": () => import("./assets/Login-D5GrPBvX.js"), "./Pages/Auth/Register.vue": () => import("./assets/Register-CzVL4jZw.js"), "./Pages/Auth/ResetPassword.vue": () => import("./assets/ResetPassword-B66p_HuF.js"), "./Pages/Auth/VerifyEmail.vue": () => import("./assets/VerifyEmail-spwoBlx-.js"), "./Pages/Dashboard.vue": () => import("./assets/Dashboard-DkK_liv0.js"), "./Pages/Home.vue": () => import("./assets/Home-BgAnjBX5.js"), "./Pages/Profile/Edit.vue": () => import("./assets/Edit-DbmYqj-C.js"), "./Pages/Profile/Partials/DeleteUserForm.vue": () => import("./assets/DeleteUserForm-C_f33_4A.js"), "./Pages/Profile/Partials/UpdatePasswordForm.vue": () => import("./assets/UpdatePasswordForm-DbI6q6Go.js"), "./Pages/Profile/Partials/UpdateProfileInformationForm.vue": () => import("./assets/UpdateProfileInformationForm-BOjNNy-X.js"), "./Pages/Welcome.vue": () => import("./assets/Welcome-BhVGRw0Z.js") })),
     setup({ App, props, plugin }) {
-      return createSSRApp({
-        render: () => h$1(App, props)
-      }).use(plugin).use(k);
+      return createSSRApp({ render: () => h$1(App, props) }).use(plugin).use(k, {
+        ...page.props.ziggy,
+        location: new URL(page.props.ziggy.location)
+      });
     }
   })
 );
