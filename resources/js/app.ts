@@ -1,22 +1,25 @@
 import "./bootstrap";
 import "../css/app.css";
 
-import {createSSRApp, h} from 'vue'
+import {createSSRApp, DefineComponent, h} from 'vue'
 import {createInertiaApp} from "@inertiajs/inertia-vue3";
 import {resolvePageComponent} from "laravel-vite-plugin/inertia-helpers";
-import Plugins from "./Plugins";
+import {ZiggyVue} from "ziggy-js";
+// import Plugins from "./Plugins";
+
+const appName = import.meta.env.VITE_APP_NAME || "ReleaseNexus";
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
-    resolve: (name) =>
-        resolvePageComponent(
+    resolve: async (name) =>
+        await resolvePageComponent(
             `./Pages/${name}.vue`,
-            import.meta.glob("./Pages/**/*.vue")
+            import.meta.glob<DefineComponent>("./Pages/**/*.vue")
         ),
     setup({el, app, props, plugin}) {
-        return createSSRApp({render: () => h(app, props)})
+        createSSRApp({render: () => h(app, props)})
             .use(plugin)
-            .use(Plugins)
+            .use(ZiggyVue, (window as any).Ziggy)
             .mount(el);
     },
 }).then(r => {

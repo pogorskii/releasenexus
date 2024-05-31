@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use Quantumweb\DBEncryption\Encrypter;
 
 class LoginRequest extends FormRequest
 {
@@ -42,8 +41,6 @@ class LoginRequest extends FormRequest
             'email'    => Encrypter::encrypt(Str::lower($this->input('email'))),
             'password' => $this->input('password'),
         ];
-
-        //        dd($data);
 
         if (!Auth::attempt($data, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());

@@ -25,6 +25,7 @@
         "@vitejs/plugin-vue": "^5.0.4",
         "@vue/server-renderer": "^3.4.27",
         "tailwindcss": "^4.0.0-alpha.14",
-        "vue": "^3.4.23"
+        "vue": "^3.4.23",
+        "ziggy-js": "^2.2.1"
     }
 }

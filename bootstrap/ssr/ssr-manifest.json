@@ -1,6 +1,8 @@
 {
   "\u0000plugin-vue:export-helper": [],
+  "resources/js/Pages/Auth/Login.vue": [],
+  "resources/js/Pages/Auth/Login.vue?vue&type=script&setup=true&lang.ts": [],
   "resources/js/Pages/Home.vue": [],
-  "resources/js/Plugins/index.js": [],
-  "resources/js/ssr.js": []
+  "resources/js/ssr.js": [],
+  "vendor/tightenco/ziggy/dist/index.js": []
 }
