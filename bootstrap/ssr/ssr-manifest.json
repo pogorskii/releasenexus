@@ -154,17 +154,16 @@
     "/build/assets/UpdateProfileInformationForm-BOjNNy-X.js"
   ],
   "resources/js/Pages/Welcome.vue": [
-    "/build/assets/Welcome-BhVGRw0Z.js",
+    "/build/assets/Welcome-Dn4kg8Da.js",
     "/build/assets/Welcome-BPpV1xjn.css"
   ],
   "resources/js/Pages/Welcome.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Welcome-BhVGRw0Z.js",
+    "/build/assets/Welcome-Dn4kg8Da.js",
     "/build/assets/Welcome-BPpV1xjn.css"
   ],
   "resources/js/Pages/Welcome.vue?vue&type=style&index=0&lang.css": [
-    "/build/assets/Welcome-BhVGRw0Z.js",
+    "/build/assets/Welcome-Dn4kg8Da.js",
     "/build/assets/Welcome-BPpV1xjn.css"
   ],
-  "resources/js/ssr.ts": [],
-  "vendor/tightenco/ziggy/dist/index.js": []
+  "resources/js/ssr.ts": []
 }
