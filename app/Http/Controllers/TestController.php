@@ -18,6 +18,8 @@ class TestController extends Controller
             // Count all the games in the local db
             $gamesCount = Game::count();
 
+//            ray('test');
+
 //            dd($gamesCount);
 
             return Inertia::render('Dashboard', [

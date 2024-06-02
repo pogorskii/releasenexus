@@ -7,7 +7,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
-class AddGamesToDB
+class AddGamesToDBAction
 {
     public static function execute(array $games): array
     {
