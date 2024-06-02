@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\IGDB\RefreshIGDBAccessTokenAction;
 use App\Http\Resources\UserResource;
 use App\Models\Game;
+use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Inertia\Inertia;
 
 class TestController extends Controller
@@ -25,7 +24,7 @@ class TestController extends Controller
                 'user'  => $user,
                 'games' => $gamesCount,
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $e->getMessage();
         }
     }

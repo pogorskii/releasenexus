@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Games\TransitGamesFromIGDBToDB;
+use Exception;
 use Illuminate\Console\Command;
 
 class DumpGames extends Command
@@ -12,13 +14,12 @@ class DumpGames extends Command
      * @var string
      */
     protected $signature = 'games:dump';
-
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Fetches games from IGDB and dumps them into the database.';
+    protected $description = 'Fetches games from IGDB and adds them to the database.';
 
     /**
      * Execute the console command.
@@ -27,10 +28,9 @@ class DumpGames extends Command
     {
         try {
             $this->info('Dumping games into the database...');
-            $this->withProgressBar(2,\App\Actions\IGDB\TransitGamesFromOriginToDB::execute());
-//           $this->withProgressBar(\App\Actions\IGDB\TransitGamesFromOriginToDB::execute());
-            $this->info('/n Games dumped successfully.');
-        } catch (\Exception $e) {
+            $result = TransitGamesFromIGDBToDB::execute();
+            $this->info("{$result['written']} games successfully added to the DB, {$result['skipped']} games skipped.");
+        } catch (Exception $e) {
             $this->error('An error occurred while dumping games into the database.');
             // Log error
         }

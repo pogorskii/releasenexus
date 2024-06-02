@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\IGDB;
+namespace App\Actions\Games\IGDB;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
