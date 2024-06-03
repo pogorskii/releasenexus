@@ -14,7 +14,7 @@ class FetchGamesFromIGDB extends Command
      *
      * @var string
      */
-    protected $signature = 'igdb:fetch-games {iteration}';
+    protected $signature = 'igdb:fetch-games {iterations}';
     /**
      * The console command description.
      *
@@ -29,8 +29,8 @@ class FetchGamesFromIGDB extends Command
     public function handle(): array
     {
         $this->info('Fetching games from IGDB...');
-        $iteration = $this->argument('iteration');
-        $games     = FetchGamesFromIGDBAction::execute($iteration);
+        $iterations = $this->argument('iterations');
+        $games      = FetchGamesFromIGDBAction::execute($iterations);
 
 //            $this->info("{$games['written']} games successfully fetched from IGDB, {$games['skipped']} games skipped.");
 

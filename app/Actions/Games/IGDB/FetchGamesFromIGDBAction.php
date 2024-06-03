@@ -4,7 +4,6 @@ namespace App\Actions\Games\IGDB;
 
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Pool;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 
 class FetchGamesFromIGDBAction
@@ -58,10 +57,11 @@ class FetchGamesFromIGDBAction
             }
         });
 
-        $flattenReponse = Arr::flatten($responses->json());
+        $fetchedGames = [];
+        collect($responses)->map(function ($response) use (&$fetchedGames) {
+            $fetchedGames = array_merge($fetchedGames, $response->json());
+        });
 
-//        dd($response->json());
-
-        return $flattenReponse->json();
+        return $fetchedGames;
     }
 }
