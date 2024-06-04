@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -35,6 +37,10 @@ class AppServiceProvider extends ServiceProvider
                 'Client-ID'     => config('services.igdb.client_id'),
                 'Authorization' => 'Bearer '.config('services.igdb.access_token'),
             ])->baseUrl('https://api.igdb.com/v4/');
+        });
+
+        RateLimiter::for('igdb', function () {
+            return Limit::perMinute(12);
         });
     }
 }
