@@ -13,7 +13,7 @@ class FetchGamesFromIGDBAction
      */
     public static function execute(int $iterations = 1, string $sortingRule = "updated_at desc"): array
     {
-        $fields       = [
+        $fields = implode(', ', [
             '*',
             'age_ratings.*',
             'age_ratings.content_descriptions.*',
@@ -31,29 +31,13 @@ class FetchGamesFromIGDBAction
             'franchise.*',
             'franchises.*',
             'game_engines.*',
-        ];
-        $fieldsString = implode(', ', $fields);
+        ]);
 
-//        $offsetValue = $offset * 500;
-
-        $headers = [
-            'Accept'        => 'application/json',
-            'Client-ID'     => config('services.igdb.client_id'),
-            'Authorization' => 'Bearer '.config('services.igdb.access_token'),
-        ];
-//        $body    = "fields {$fieldsString}; where themes != (42); limit 500; offset {$offsetValue}; sort {$sortingRule};";
-
-//        $response = Http::withHeaders([
-//            'Accept'        => 'application/json',
-//            'Client-ID'     => config('services.igdb.client_id'),
-//            'Authorization' => 'Bearer '.config('services.igdb.access_token'),
-//        ])->withBody("fields {$fieldsString}; where themes != (42); limit 500; offset {$offsetValue}; sort {$sortingRule};")->post("https://api.igdb.com/v4/games");
-
-        $responses = Http::pool(function (Pool $pool) use ($iterations, $headers, $fieldsString, $sortingRule) {
+        $responses = Http::pool(function (Pool $pool) use ($iterations, $fields, $sortingRule) {
             for ($i = 0; $i < $iterations; $i++) {
                 $offsetValue = $i * 500;
-                $body        = "fields {$fieldsString}; where themes != (42); limit 500; offset {$offsetValue}; sort {$sortingRule};";
-                $pool->as($i)->withHeaders($headers)->withBody($body)->post("https://api.igdb.com/v4/games");
+                $body        = "fields {$fields}; where themes != (42); limit 500; offset {$offsetValue}; sort {$sortingRule};";
+                $pool->as($i)->igdb()->withBody($body)->post("games");
             }
         });
 
