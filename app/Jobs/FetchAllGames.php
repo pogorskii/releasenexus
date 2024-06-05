@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Actions\Games\AddGamesToDBAction;
+use App\Actions\Games\ExportGamesToCSV;
 use App\Actions\Games\IGDB\FetchGamesFromIGDBAction;
 use App\Models\Game;
 use Exception;
@@ -31,13 +33,12 @@ class FetchAllGames implements ShouldQueue
     public function handle(): void
     {
         try {
-            $games = FetchGamesFromIGDBAction::execute(5);
-            foreach ($games as $game) {
-                Game::create($game);
-            }
+            $games = FetchGamesFromIGDBAction::execute(0);
+            ExportGamesToCSV::execute($games);
+//            AddGamesToDBAction::execute($games);
         } catch (Exception $e) {
             // Log error
-            throw new Exception('AnAAAAAAA error occurred while fetching games from IGDB.'.$e->getMessage());
+            throw new Exception('An error occurred while fetching games from IGDB.'.$e->getMessage());
         }
     }
 

@@ -33,6 +33,11 @@ Route::get('/dashboard', [\App\Http\Controllers\TestController::class, 'index'])
     'verified',
 ])->name('dashboard');
 
+Route::post('/get-csv', [\App\Http\Controllers\TestController::class, 'getCSV'])->middleware([
+    'auth',
+    'verified',
+])->name('get-csv');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

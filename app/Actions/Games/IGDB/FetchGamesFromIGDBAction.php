@@ -14,7 +14,7 @@ class FetchGamesFromIGDBAction
     /**
      * @throws ConnectionException
      */
-    public static function execute(int $iterations = 1, string $sortingRule = "updated_at desc"): array
+    public static function execute(int $offsetMultiplier, string $sortingRule = "updated_at desc"): array
     {
         $fields = implode(', ', [
             '*',
@@ -36,9 +36,9 @@ class FetchGamesFromIGDBAction
             'game_engines.*',
         ]);
 
-        $responses = Http::pool(function (Pool $pool) use ($iterations, $fields, $sortingRule) {
-            for ($i = 0; $i < $iterations; $i++) {
-                $offsetValue = $i * 500;
+        $responses = Http::pool(function (Pool $pool) use ($offsetMultiplier, $fields, $sortingRule) {
+            for ($i = 0; $i < 5; $i++) {
+                $offsetValue = $i * 500 + $offsetMultiplier * 500;
                 $body        = "fields {$fields}; where themes != (42); limit 500; offset {$offsetValue}; sort {$sortingRule};";
                 $pool->as($i)->igdb()->withBody($body)->post("games");
             }
