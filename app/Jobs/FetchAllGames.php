@@ -7,6 +7,7 @@ use App\Actions\Games\ExportGamesToCSV;
 use App\Actions\Games\IGDB\FetchGamesFromIGDBAction;
 use App\Models\Game;
 use Exception;
+use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -16,14 +17,16 @@ use Illuminate\Queue\SerializesModels;
 
 class FetchAllGames implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Batchable;
+
+    public int $chunkNumber;
 
     /**
      * Create a new job instance.
      */
-    public function __construct()
+    public function __construct($chunkNumber)
     {
-        //
+        $this->chunkNumber = $chunkNumber;
     }
 
     /**

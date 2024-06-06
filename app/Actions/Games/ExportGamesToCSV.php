@@ -3,20 +3,13 @@
 namespace App\Actions\Games;
 
 use App\Models\Game;
+use Illuminate\Support\Facades\Storage;
 
 class ExportGamesToCSV
 {
-    public static function execute(array $games): \Symfony\Component\HttpFoundation\StreamedResponse
+    public static function execute(array $games): void
     {
-//        $csv = fopen('games.csv', 'w');
-//        fputcsv($csv, array_keys($games[0]));
-//
-//        foreach ($games as $game) {
-//            fputcsv($csv, $game);
-//        }
-//
-//        fclose($csv);
-
+        // Write all games in a csv file and save it to public disk.
         $filename = 'games-test.csv';
 
         $headers = [
@@ -27,52 +20,82 @@ class ExportGamesToCSV
             'Expires' => '0',
         ];
 
-        return response()->stream(function () use ($games) {
-            $handle = fopen('php://output', 'w');
+        $handle = fopen($filename, 'w');
 
-            // Add CSV headers
+        // Add CSV headers
+        fputcsv($handle, [
+            'IGDB ID',
+            'Name',
+            'Release Date'
+        ]);
+
+        collect($games)->chunk(500)->each(function ($chunk) use ($handle) {
+            foreach ($chunk as $game) {
+                // Extract data from each game.
+                $data = [
+                    $game['id'],
+                    $game['name'],
+                    $game['release_date'] ?? '',
+                ];
+
+                // Write data to a CSV file.
+                fputcsv($handle, $data);
+            }
+        });
+
+        // Close CSV file handle
+        fclose($handle);
+
+
+        // Get the current date and time and convert it to a string.
+        $currentDate = now()->toDateString();
+
+        // Replace : with - in the time string.
+$currentTime = str_replace(':', '-', now()->toTimeString());
+
+        // Save the CSV file to the storage disk, but first convert handle from resource to string.
+        Storage::disk('public')->put("{$filename}-{$currentDate}-{$currentTime}", file_get_contents($filename));
+
+//        $filename = 'games-test.csv';
+//
+//        $headers = [
+//            'Content-Type' => 'text/csv',
+//            'Content-Disposition' => "attachment; filename=\"$filename\"",
+//            'Pragma' => 'no-cache',
+//            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+//            'Expires' => '0',
+//        ];
+//
+//        return response()->stream(function () use ($games, $filename) {
+//            $handle = fopen('php://output', 'w');
+//
+//            // Add CSV headers
 //            fputcsv($handle, [
 //                'IGDB ID',
 //                'Name',
 //                'Release Date'
 //
 //            ]);
-
-            fputcsv($handle, \Schema::getColumnListing('games'));
-
-            // Fetch and process data in chunks
-//            Game::chunk(500, function ($games) use ($handle) {
-//                foreach ($games as $game) {
+//
+//            collect($games)->chunk(500)->each(function ($chunk) use ($handle) {
+//                foreach ($chunk as $game) {
 //                    // Extract data from each game.
 //                    $data = [
-//                        $game->origin_id,
-//                        $game->name,
-//                        $game->original_release_date ?? '',
-//                        //                        isset($game->skills)? implode(", ", json_decode($game->skills)) : '',
+//                        $game['id'],
+//                        $game['name'],
+//                        $game['release_date'] ?? '',
 //                    ];
 //
 //                    // Write data to a CSV file.
 //                    fputcsv($handle, $data);
 //                }
 //            });
-
-            collect($games)->chunk(500)->each(function ($chunk) use ($handle) {
-                foreach ($chunk as $game) {
-                    // Extract data from each game.
-                    $data = [
-                        $game['id'],
-                        $game['name'],
-                        $game['release_date'] ?? '',
-                        //                        isset($game->skills)? implode(", ", json_decode($game->skills)) : '',
-                    ];
-
-                    // Write data to a CSV file.
-                    fputcsv($handle, $data);
-                }
-            });
-
-            // Close CSV file handle
-            fclose($handle);
-        }, 200, $headers);
+//
+//            // Close CSV file handle
+//            fclose($handle);
+//
+//            // Save the CSV file to the storage disk.
+//            Storage::disk('public')->put($filename, $handle);
+//        }, 200, $headers);
     }
 }

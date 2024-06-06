@@ -28,7 +28,7 @@ class TestJob extends Command
     {
         try {
             $this->info('Testing job...');
-            FetchAllGames::dispatch();
+            FetchAllGames::dispatch(0);
             $this->info('Job dispatched.');
         } catch (Exception $e) {
             $this->error('An error occurred while testing the job.'.$e->getMessage());
