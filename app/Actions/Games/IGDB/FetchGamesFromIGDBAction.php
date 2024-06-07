@@ -4,7 +4,6 @@ namespace App\Actions\Games\IGDB;
 
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Pool;
-use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
@@ -18,28 +17,28 @@ class FetchGamesFromIGDBAction
     {
         $fields = implode(', ', [
             '*',
-            'age_ratings.*',
-            'age_ratings.content_descriptions.*',
-            'alternative_names.*',
-            'cover.*',
-            'game_localizations.*',
-            'external_games.*',
-            'language_supports.*',
-            'release_dates.*',
-            'screenshots.*',
-            'videos.*',
-            'websites.*',
-            'collection.*',
-            'collections.*',
-            'franchise.*',
-            'franchises.*',
-            'game_engines.*',
+            //            'age_ratings.*',
+            //            'age_ratings.content_descriptions.*',
+            //            'alternative_names.*',
+            //            'cover.*',
+            //            'game_localizations.*',
+            //            'external_games.*',
+            //            'language_supports.*',
+            //            'release_dates.*',
+            //            'screenshots.*',
+            //            'videos.*',
+            //            'websites.*',
+            //            'collection.*',
+            //            'collections.*',
+            //            'franchise.*',
+            //            'franchises.*',
+            //            'game_engines.*',
         ]);
 
         $responses = Http::pool(function (Pool $pool) use ($offsetMultiplier, $fields, $sortingRule) {
             for ($i = 0; $i < 5; $i++) {
                 $offsetValue = $i * 500 + $offsetMultiplier * 500;
-                $body        = "fields {$fields}; where themes != (42); limit 500; offset {$offsetValue}; sort {$sortingRule};";
+                $body        = "fields {$fields}; limit 500; offset {$offsetValue}; sort {$sortingRule};";
                 $pool->as($i)->igdb()->withBody($body)->post("games");
             }
         });
