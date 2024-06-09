@@ -37,7 +37,7 @@ class FetchGamesFromIGDBAction
 
         $responses = Http::pool(function (Pool $pool) use ($offsetMultiplier, $fields, $sortingRule) {
             for ($i = 0; $i < 5; $i++) {
-                $offsetValue = $i * 500 + $offsetMultiplier * 500;
+                $offsetValue = $i * 500 + $offsetMultiplier * 5 * 500;
                 $body        = "fields {$fields}; limit 500; offset {$offsetValue}; sort {$sortingRule};";
                 $pool->as($i)->igdb()->withBody($body)->post("games");
             }
