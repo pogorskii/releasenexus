@@ -3,6 +3,10 @@
 namespace App\Actions\Games;
 
 use Illuminate\Support\Facades\Storage;
+use League\Csv\CannotInsertRecord;
+use League\Csv\Exception;
+use League\Csv\UnavailableStream;
+use League\Csv\Writer;
 
 function encode_json_or_save_empty_value(string $key, array $array): string
 {
@@ -12,11 +16,76 @@ function encode_json_or_save_empty_value(string $key, array $array): string
 class ExportGamesToCSV
 {
 //           $encode_json_or_save_empty_string = fn(string $key, array $array) => json_encode(array_key_exists($key, $array) ? $array[$key] : []);
+    /**
+     * @throws UnavailableStream
+     */
     public static function execute(array $games, string $path): void
     {
-        $handle = fopen($path, 'a');
+//        $handle = fopen($path, 'a');
+        $writer = Writer::createFromPath($path, 'a');
 
-        fputcsv($handle, [
+//        fputcsv($handle, [
+//            'id',
+//            'age_ratings',
+//            'aggregated_rating',
+//            'aggregated_rating_count',
+//            'alternative_names',
+//            'artworks',
+//            'bundles',
+//            'category',
+//            'checksum',
+//            'collection',
+//            'collections',
+//            'cover',
+//            'created_at',
+//            'dlcs',
+//            'expanded_games',
+//            'expansions',
+//            'external_games',
+//            'first_release_date',
+//            'follows',
+//            'forks',
+//            'franchise',
+//            'franchises',
+//            'game_engines',
+//            'game_localizations',
+//            'game_modes',
+//            'genres',
+//            'hypes',
+//            'involved_companies',
+//            'keywords',
+//            'language_supports',
+//            'multiplayer_modes',
+//            'name',
+//            'parent_game',
+//            'platforms',
+//            'player_perspectives',
+//            'ports',
+//            'rating',
+//            'rating_count',
+//            'release_dates',
+//            'remakes',
+//            'remasters',
+//            'screenshots',
+//            'similar_games',
+//            'slug',
+//            'standalone_expansions',
+//            'status',
+//            'storyline',
+//            'summary',
+//            'tags',
+//            'themes',
+//            'total_rating',
+//            'total_rating_count',
+//            'updated_at',
+//            'url',
+//            'version_parent',
+//            'version_title',
+//            'videos',
+//            'websites',
+//        ]);
+
+        $headers = [
             'id',
             'age_ratings',
             'aggregated_rating',
@@ -75,14 +144,19 @@ class ExportGamesToCSV
             'version_title',
             'videos',
             'websites',
-        ]);
+        ];
 
-        collect($games)->chunk(500)->each(function ($chunk) use ($handle) {
+        $writer->insertOne($headers);
+        $writer->setEscape('');
+        $writer->setEndOfLine("\r\n");
+
+        collect($games)->chunk(500)->each(function ($chunk) use ($writer) {
+            $dataToWrite = [];
             foreach ($chunk as $game) {
                 if ($game['id'] != 1) {
                     continue;
                 }
-                $data = [
+                $dataToWrite[] = [
                     $game['id'],
                     json_encode($game['age_ratings'] ?? ''),
                     $game['aggregated_rating'] ?? '',
@@ -142,11 +216,11 @@ class ExportGamesToCSV
                     encode_json_or_save_empty_value('videos', $game),
                     encode_json_or_save_empty_value('websites', $game),
                 ];
-
-                fputcsv($handle, $data);
+//                fputcsv($handle, $data);
             }
-        });
 
-        fclose($handle);
+            $writer->insertAll($dataToWrite);
+        });
+//        fclose($handle);
     }
 }
