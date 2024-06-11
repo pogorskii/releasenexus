@@ -36,7 +36,7 @@ class ExportAllGamesFromIGDB extends Command
             $path     = storage_path('app/public/'.$filename);
 
             $jobs = [];
-            for ($i = 0; $i < 113; $i++) {
+            for ($i = 0; $i < 1; $i++) {
                 $jobs[] = new ExportGamesFromIGDBJob($i, $path);
             }
 

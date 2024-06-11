@@ -79,6 +79,9 @@ class ExportGamesToCSV
 
         collect($games)->chunk(500)->each(function ($chunk) use ($handle) {
             foreach ($chunk as $game) {
+                if ($game['id'] != 1) {
+                    continue;
+                }
                 $data = [
                     $game['id'],
                     json_encode($game['age_ratings'] ?? ''),
@@ -126,7 +129,7 @@ class ExportGamesToCSV
                     $game['slug'] ?? '',
                     encode_json_or_save_empty_value('standalone_expansions', $game),
                     $game['status'] ?? '',
-                    $game['storyline'] ?? '',
+                    $game['storyline'] ? "_{$game['storyline']}_" : '',
                     $game['summary'] ?? '',
                     encode_json_or_save_empty_value('tags', $game),
                     encode_json_or_save_empty_value('themes', $game),
