@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Actions\Games\ExportGamesToCSVAction;
-use App\Actions\Games\IGDB\FetchGamesFromIGDBAction;
+use App\Actions\Games\FetchGamesAction;
 use Exception;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -34,9 +34,13 @@ class ExportGamesFromIGDBJob implements ShouldQueue
      */
     public function handle(): void
     {
-        Log::info('Exporting games from IGDB chunk '.$this->chunkNumber.' started.');
-        $games  = FetchGamesFromIGDBAction::execute($this->chunkNumber, 'id asc');
-        $result = ExportGamesToCSVAction::execute($games, $this->path);
-        Log::info('Exporting games from IGDB chunk '.$this->chunkNumber.' result: '.json_encode($result));
+        try {
+            Log::info('Exporting games from IGDB chunk '.$this->chunkNumber.' started.');
+            $games  = FetchGamesAction::execute($this->chunkNumber);
+            $result = ExportGamesToCSVAction::execute($games, $this->path);
+            Log::info('Exporting games from IGDB chunk '.$this->chunkNumber.' result: '.json_encode($result));
+        } catch (Exception $e) {
+            Log::error('An error occurred while exporting games from IGDB chunk '.$this->chunkNumber.': '.$e->getMessage());
+        }
     }
 }

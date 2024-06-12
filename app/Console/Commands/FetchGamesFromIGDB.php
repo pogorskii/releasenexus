@@ -2,8 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Actions\Games\IGDB\FetchGamesFromIGDBAction;
-use Exception;
+use App\Actions\Games\FetchGamesAction;
 use Illuminate\Console\Command;
 use Illuminate\Http\Client\ConnectionException;
 
@@ -30,7 +29,7 @@ class FetchGamesFromIGDB extends Command
     {
         $this->info('Fetching games from IGDB...');
         $iteration  = $this->argument('iteration');
-        $games      = FetchGamesFromIGDBAction::execute($iteration);
+        $games      = FetchGamesAction::execute($iteration);
         $totalGames = collect($games)->count();
         $this->info("{$totalGames} Games fetched from IGDB.");
 

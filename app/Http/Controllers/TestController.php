@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Games\ExportGamesToCSVAction;
-use App\Actions\Games\IGDB\FetchGamesFromIGDBAction;
+use App\Actions\Games\FetchGamesAction;
 use App\Http\Resources\UserResource;
-use App\Jobs\ExportGamesFromIGDBJob;
 use App\Models\Game;
 use Exception;
 use Illuminate\Http\Request;
@@ -36,7 +35,7 @@ class TestController extends Controller
 
     public function getCSV()
     {
-        $games = FetchGamesFromIGDBAction::execute(0);
+        $games = FetchGamesAction::execute(0);
         $csv   = ExportGamesToCSVAction::execute($games);
 
         return $csv;

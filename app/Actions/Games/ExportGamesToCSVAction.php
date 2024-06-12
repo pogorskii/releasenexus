@@ -2,15 +2,11 @@
 
 namespace App\Actions\Games;
 
+use App\Helpers\GlobalHelper;
 use League\Csv\CannotInsertRecord;
 use League\Csv\Exception;
 use League\Csv\UnavailableStream;
 use League\Csv\Writer;
-
-function encode_json_or_save_empty_value(string $key, array $array): string
-{
-    return json_encode(array_key_exists($key, $array) ? $array[$key] : []);
-}
 
 class ExportGamesToCSVAction
 {
@@ -95,63 +91,63 @@ class ExportGamesToCSVAction
                 foreach ($chunk as $game) {
                     $dataToWrite[] = [
                         $game['id'],
-                        encode_json_or_save_empty_value('age_ratings', $game),
+                        GlobalHelper::encode_csv_json('age_ratings', $game),
                         $game['aggregated_rating'] ?? '',
                         $game['aggregated_rating_count'] ?? '',
-                        encode_json_or_save_empty_value('alternative_names', $game),
-                        encode_json_or_save_empty_value('artworks', $game),
-                        encode_json_or_save_empty_value('bundles', $game),
+                        GlobalHelper::encode_csv_json('alternative_names', $game),
+                        GlobalHelper::encode_csv_json('artworks', $game),
+                        GlobalHelper::encode_csv_json('bundles', $game),
                         $game['category'] ?? '',
                         $game['checksum'] ?? '',
                         $game['collection'] ?? '',
-                        encode_json_or_save_empty_value('collections', $game),
+                        GlobalHelper::encode_csv_json('collections', $game),
                         $game['cover'] ?? '',
                         $game['created_at'] ?? '',
-                        encode_json_or_save_empty_value('dlcs', $game),
-                        encode_json_or_save_empty_value('expanded_games', $game),
-                        encode_json_or_save_empty_value('expansions', $game),
-                        encode_json_or_save_empty_value('external_games', $game),
+                        GlobalHelper::encode_csv_json('dlcs', $game),
+                        GlobalHelper::encode_csv_json('expanded_games', $game),
+                        GlobalHelper::encode_csv_json('expansions', $game),
+                        GlobalHelper::encode_csv_json('external_games', $game),
                         $game['first_release_date'] ?? '',
                         $game['follows'] ?? '',
-                        encode_json_or_save_empty_value('forks', $game),
+                        GlobalHelper::encode_csv_json('forks', $game),
                         $game['franchise'] ?? '',
-                        encode_json_or_save_empty_value('franchises', $game),
-                        encode_json_or_save_empty_value('game_engines', $game),
-                        encode_json_or_save_empty_value('game_localizations', $game),
-                        encode_json_or_save_empty_value('game_modes', $game),
-                        encode_json_or_save_empty_value('genres', $game),
+                        GlobalHelper::encode_csv_json('franchises', $game),
+                        GlobalHelper::encode_csv_json('game_engines', $game),
+                        GlobalHelper::encode_csv_json('game_localizations', $game),
+                        GlobalHelper::encode_csv_json('game_modes', $game),
+                        GlobalHelper::encode_csv_json('genres', $game),
                         $game['hypes'] ?? '',
-                        encode_json_or_save_empty_value('involved_companies', $game),
-                        encode_json_or_save_empty_value('keywords', $game),
-                        encode_json_or_save_empty_value('language_supports', $game),
-                        encode_json_or_save_empty_value('multiplayer_modes', $game),
+                        GlobalHelper::encode_csv_json('involved_companies', $game),
+                        GlobalHelper::encode_csv_json('keywords', $game),
+                        GlobalHelper::encode_csv_json('language_supports', $game),
+                        GlobalHelper::encode_csv_json('multiplayer_modes', $game),
                         $game['name'] ?? '',
                         $game['parent_game'] ?? '',
-                        encode_json_or_save_empty_value('platforms', $game),
-                        encode_json_or_save_empty_value('player_perspectives', $game),
-                        encode_json_or_save_empty_value('ports', $game),
+                        GlobalHelper::encode_csv_json('platforms', $game),
+                        GlobalHelper::encode_csv_json('player_perspectives', $game),
+                        GlobalHelper::encode_csv_json('ports', $game),
                         $game['rating'] ?? '',
                         $game['rating_count'] ?? '',
-                        encode_json_or_save_empty_value('release_dates', $game),
-                        encode_json_or_save_empty_value('remakes', $game),
-                        encode_json_or_save_empty_value('remasters', $game),
-                        encode_json_or_save_empty_value('screenshots', $game),
-                        encode_json_or_save_empty_value('similar_games', $game),
+                        GlobalHelper::encode_csv_json('release_dates', $game),
+                        GlobalHelper::encode_csv_json('remakes', $game),
+                        GlobalHelper::encode_csv_json('remasters', $game),
+                        GlobalHelper::encode_csv_json('screenshots', $game),
+                        GlobalHelper::encode_csv_json('similar_games', $game),
                         $game['slug'] ?? '',
-                        encode_json_or_save_empty_value('standalone_expansions', $game),
+                        GlobalHelper::encode_csv_json('standalone_expansions', $game),
                         $game['status'] ?? '',
                         $game['storyline'] ?? '',
                         $game['summary'] ?? '',
-                        encode_json_or_save_empty_value('tags', $game),
-                        encode_json_or_save_empty_value('themes', $game),
+                        GlobalHelper::encode_csv_json('tags', $game),
+                        GlobalHelper::encode_csv_json('themes', $game),
                         $game['total_rating'] ?? '',
                         $game['total_rating_count'] ?? '',
                         $game['updated_at'] ?? '',
                         $game['url'] ?? '',
                         $game['version_parent'] ?? '',
                         $game['version_title'] ?? '',
-                        encode_json_or_save_empty_value('videos', $game),
-                        encode_json_or_save_empty_value('websites', $game),
+                        GlobalHelper::encode_csv_json('videos', $game),
+                        GlobalHelper::encode_csv_json('websites', $game),
                     ];
                 }
 
