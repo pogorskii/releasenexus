@@ -23,7 +23,7 @@ class ExportAllGamesFromIGDB extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Fetches all games from IGDB and exports them to a CSV file.';
 
     /**
      * Execute the console command.
@@ -31,27 +31,20 @@ class ExportAllGamesFromIGDB extends Command
     public function handle(): void
     {
         try {
-            $this->info('Testing job...');
-            $filename = "games-test-".now()->format('Ymd-U').".csv";
-            $path     = storage_path('app/public/'.$filename);
+            $this->info('Exporting all games from IGDB...');
+            $filename = "games-dump-".now()->format('Ymd-U').".csv";
+            $path     = storage_path('app/public/igdb/'.$filename);
 
             $jobs = [];
-            for ($i = 0; $i < 1; $i++) {
+            for ($i = 0; $i < 115; $i++) {
                 $jobs[] = new ExportGamesFromIGDBJob($i, $path);
             }
 
-            Bus::batch($jobs)->before(function (Batch $batch) {
-                Log::info('Exporting games from IGDB started.');
-            })->progress(function (Batch $batch) {
-                Log::info('Exporting games from IGDB progress: '.$batch->progress().'%');
-            })->catch(function (Batch $batch, Throwable $e) {
-                Log::error('Error exporting games from IGDB: '.$e->getMessage());
-            })->finally(function (Batch $batch) {
-                Log::info('Exporting games from IGDB completed.');
-            })->dispatch();
-            $this->info('Job finished.');
+            $this->withProgressBar($jobs, fn($job) => Bus::dispatch($job));
+            $this->newLine();
+            $this->info('Finished exporting all games from IGDB.');
         } catch (Exception|Throwable $e) {
-            $this->error('An error occurred while testing the job.'.$e->getMessage());
+            $this->error('An error occurred while exporting all games from IGDB: '.$e->getMessage());
         }
     }
 }
