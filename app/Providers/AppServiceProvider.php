@@ -38,5 +38,9 @@ class AppServiceProvider extends ServiceProvider
                 'Authorization' => 'Bearer '.config('services.igdb.access_token'),
             ])->baseUrl('https://api.igdb.com/v4/');
         });
+
+        RateLimiter::for('igdb', function () {
+            return Limit::perSecond(1);
+        });
     }
 }

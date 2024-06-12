@@ -10,14 +10,14 @@ use Illuminate\Support\Facades\Http;
 
 class FetchFromIGDBAction
 {
-    public static function execute(string $endpoint, int $offsetMultiplier, string $sort = 'id asc', array $fields = ['*'], int $limit = 2500): array
+    public static function execute(string $endpoint, int $offsetMultiplier, string $sort = 'id asc', array $fields = ['*'], int $limit = 2000): array
     {
         $fieldsString    = implode(', ', $fields);
-        $limitPerRequest = $limit / 5;
+        $limitPerRequest = $limit / 4;
 
         $responses = Http::pool(function (Pool $pool) use ($endpoint, $offsetMultiplier, $fieldsString, $sort, $limitPerRequest) {
-            for ($i = 0; $i < 5; $i++) {
-                $offsetValue = $i * $limitPerRequest + $offsetMultiplier * 5 * $limitPerRequest;
+            for ($i = 0; $i < 4; $i++) {
+                $offsetValue = $i * $limitPerRequest + $offsetMultiplier * 4 * $limitPerRequest;
                 $body        = "fields {$fieldsString}; limit {$limitPerRequest}; offset {$offsetValue}; sort {$sort};";
                 $pool->as($i)->igdb()->withBody($body)->post($endpoint);
             }

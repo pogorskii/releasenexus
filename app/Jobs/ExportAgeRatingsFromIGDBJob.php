@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Actions\Games\ExportGamesToCSVAction;
-use App\Actions\Games\FetchGamesAction;
+use App\Actions\Games\ExportAgeRatingsToCSVAction;
+use App\Actions\Games\FetchAgeRatingsAction;
 use Exception;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -14,7 +14,7 @@ use Illuminate\Queue\Middleware\RateLimitedWithRedis;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class ExportGamesFromIGDBJob implements ShouldQueue
+class ExportAgeRatingsFromIGDBJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Batchable;
 
@@ -36,12 +36,12 @@ class ExportGamesFromIGDBJob implements ShouldQueue
     public function handle(): void
     {
         try {
-            Log::info('Exporting games from IGDB chunk '.$this->chunkNumber.' started.');
-            $games  = FetchGamesAction::execute($this->chunkNumber);
-            $result = ExportGamesToCSVAction::execute($games, $this->path);
-            Log::info('Exporting games from IGDB chunk '.$this->chunkNumber.' result: '.json_encode($result));
+            Log::info('Exporting age ratings from IGDB chunk '.$this->chunkNumber.' started.');
+            $ageRatings = FetchAgeRatingsAction::execute($this->chunkNumber);
+            $result     = ExportAgeRatingsToCSVAction::execute($ageRatings, $this->path);
+            Log::info('Exporting age ratings from IGDB chunk '.$this->chunkNumber.' result: '.json_encode($result));
         } catch (Exception $e) {
-            Log::error('An error occurred while exporting games from IGDB chunk '.$this->chunkNumber.': '.$e->getMessage());
+            Log::error('An error occurred while exporting age ratings from IGDB chunk '.$this->chunkNumber.': '.$e->getMessage());
         }
     }
 
