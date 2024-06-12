@@ -156,6 +156,7 @@ class ExportGamesToCSVAction
             });
         } catch (CannotInsertRecord $e) {
             $failedRows[] = $wittenRows;
+            $errors[]     = $e->getMessage();
         } catch (Exception $e) {
             $errors[] = $e->getMessage();
         }
