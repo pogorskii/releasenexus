@@ -4,10 +4,8 @@ namespace App\Console\Commands;
 
 use App\Jobs\ExportGamesFromIGDBJob;
 use Exception;
-use Illuminate\Bus\Batch;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Bus;
-use Log;
 use Throwable;
 
 class ExportAllGamesFromIGDB extends Command
