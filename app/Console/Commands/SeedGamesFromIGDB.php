@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\SeedGamesFromIGDBJob;
+use Illuminate\Bus\Batch;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Bus;
 
@@ -34,7 +35,12 @@ class SeedGamesFromIGDB extends Command
                 $jobs[] = new SeedGamesFromIGDBJob($i);
             }
 
-            $this->withProgressBar($jobs, fn($job) => Bus::dispatch($job));
+//            $this->withProgressBar($jobs, fn($job) => Bus::dispatch($job));
+            Bus::batch($jobs)->catch(function (Batch $batch, \Throwable $e) {
+                \Log::error('An error occurred while seeding all games from IGDB: '.$e->getMessage());
+            })->then(function (Batch $batch) {
+                \Log::info('FROM BUS: Finished seeding all games from IGDB.');
+            })->dispatch();
             $this->newLine();
             $this->info('Finished seeding all games from IGDB.');
         } catch (\Exception|\Throwable $e) {

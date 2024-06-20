@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('games', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('origin_id');
+            $table->unsignedInteger('origin_id')->unique();
             $table->float('aggregated_rating')->nullable();
             $table->unsignedInteger('aggregated_rating_count')->nullable();
             $table->json('alternative_names')->nullable();

@@ -15,20 +15,22 @@ class AddGamesToDBAction
             $writtenGames = 0;
             $skippedGames = 0;
             $newGames     = [];
+            $existingGames = [];
 
-            DB::transaction(function () use ($games, &$newGames, &$skippedGames) {
-                foreach ($games as $game) {
-                    $gameExists = DB::table('games')->where('origin_id', $game['id'])->exists();
+            $gamesIds = collect($games)->pluck('id')->toArray();
 
-                    if ($gameExists) {
-                        $skippedGames++;
-                    } else {
-                        $newGames[] = $game;
-                    }
-                }
+            DB::transaction(function () use ($gamesIds, &$newGames, &$existingGames, &$skippedGames) {
+                $existingGames[] = DB::table('games')->whereIn('origin_id', $gamesIds)->pluck('origin_id')->toArray();
             });
 
-//            prepare games for raw sql insertion, ensuring that the number of values match the number of columns
+            foreach ($games as $game) {
+                if (!in_array($game['id'], $existingGames)) {
+                    $newGames[] = $game;
+                } else {
+                    $skippedGames++;
+                }
+            }
+
             $transformedGames = collect($newGames)->map(function ($game) {
                 return [
                     'origin_id'               => $game['id'],
@@ -107,11 +109,15 @@ class AddGamesToDBAction
 //                }
 //            });
 
+//dd($transformedGames);
+//            DB::table('games')->insert($transformedGames->toArray());
+
             collect($transformedGames)->chunk(2000)->each(function ($chunk) use (&$writtenGames) {
-//                DB::table('games')->insert($chunk->toArray());
-//                dd($chunk->toArray());
-                DB::table('games')->insert($chunk->toArray());
-                $writtenGames += $chunk->count();
+                Game::create($chunk->toArray());
+//                dd($chunk->toArray()[0]);
+//                $result = DB::table('games')->insert($chunk->toArray());
+//                dd($result);
+//                $writtenGames += $chunk->count();
             });
 
             return [
