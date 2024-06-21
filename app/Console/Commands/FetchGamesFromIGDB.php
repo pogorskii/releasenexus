@@ -30,7 +30,6 @@ class FetchGamesFromIGDB extends Command
         $iteration  = $this->argument('iteration');
         $games      = FetchGamesAction::execute($iteration);
         $totalGames = collect($games)->count();
-        ray($games[1]);
         $this->info("{$totalGames} games fetched from IGDB.");
 
         return $games;
