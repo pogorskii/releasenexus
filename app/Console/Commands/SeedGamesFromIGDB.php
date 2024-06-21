@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\Games\FetchGamesAction;
 use App\Jobs\SeedGamesFromIGDBJob;
 use Illuminate\Bus\Batch;
 use Illuminate\Console\Command;
@@ -30,17 +31,13 @@ class SeedGamesFromIGDB extends Command
         try {
             $this->info('Seeding all games from IGDB...');
 
-            $jobs = [];
-            for ($i = 0; $i < 150; $i++) {
-                $jobs[] = new SeedGamesFromIGDBJob($i);
-            }
+            $chunkNumber = 0;
+            do {
+                $job = new SeedGamesFromIGDBJob($chunkNumber);
+                Bus::dispatch($job);
+                $chunkNumber++;
+            } while (count(FetchGamesAction::execute($chunkNumber, 'id asc', ['id'])) > 0);
 
-//            $this->withProgressBar($jobs, fn($job) => Bus::dispatch($job));
-            Bus::batch($jobs)->catch(function (Batch $batch, \Throwable $e) {
-                \Log::error('An error occurred while seeding all games from IGDB: '.$e->getMessage());
-            })->then(function (Batch $batch) {
-                \Log::info('FROM BUS: Finished seeding all games from IGDB.');
-            })->dispatch();
             $this->newLine();
             $this->info('Finished seeding all games from IGDB.');
         } catch (\Exception|\Throwable $e) {
