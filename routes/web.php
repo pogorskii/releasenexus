@@ -39,7 +39,7 @@ Route::post('/get-csv', [\App\Http\Controllers\TestController::class, 'getCSV'])
     'verified',
 ])->name('get-csv');
 
-Route::get('/games', [GameController::class, 'index'])->name('games.index');
+Route::get('/games/calendar/{year}/{month}', [GameController::class, 'index'])->name('games.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

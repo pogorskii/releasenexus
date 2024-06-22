@@ -41,7 +41,6 @@ defineProps<{
             <div class="flex justify-center">
                 <h1 class="text-6xl">ReleaseNexus</h1>
             </div>
-            <!--            Button "Go to Games Calendar-->
             <div class="flex justify-center mt-6">
                 <Link
                     :href="route('games.index')"

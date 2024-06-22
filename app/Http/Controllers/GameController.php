@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreGameRequest;
 use App\Http\Requests\UpdateGameRequest;
+use App\Http\Resources\GameResource;
+use App\Http\Resources\GReleaseDateResource;
 use App\Models\Game;
+use App\Models\GReleaseDate;
 use Inertia\Inertia;
 
 class GameController extends Controller
@@ -12,13 +15,22 @@ class GameController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(int $year, int $month)
     {
-//        $games = Game::where('release_date', '>=', now()->toDateString())->get();
-        $games = Game::limit(20)->get();
+//        $releaseDate = GReleaseDate::with('dateable')->whereYear('date', $year)->whereMonth('date', $month)->get();
+//        Load the dateable relationship
+        $releaseDates = GReleaseDate::whereYear('date', $year)->whereMonth('date', $month)->with('dateable')->get();
+
+//        Group by dateable_id and date
+//        $releaseDays = $releaseDate->groupBy('date')->map(function ($item) {
+//            return [
+//                'date'          => $item->first()->date,
+//                'release_dates' => GReleaseDateResource::collection($item->load('dateable'))->resolve(),
+//            ];
+//        })->values()->sortBy('date')->values();
 
         return Inertia::render('Games/Calendar', [
-            'games' => $games,
+            'releases' => $releaseDates,
         ]);
     }
 
