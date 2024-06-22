@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\ExportAgeRatingsFromIGDBJob;
+use App\Jobs\ExportAgeRatingsJob;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Bus;
@@ -35,7 +35,7 @@ class ExportAllAgeRatingsFromIGDB extends Command
 
             $jobs = [];
             for ($i = 0; $i < 80; $i++) {
-                $jobs[] = new ExportAgeRatingsFromIGDBJob($i, $path);
+                $jobs[] = new ExportAgeRatingsJob($i, $path);
             }
 
             $this->withProgressBar($jobs, fn($job) => Bus::dispatch($job));

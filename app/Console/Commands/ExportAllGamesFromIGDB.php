@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\ExportGamesFromIGDBJob;
+use App\Jobs\ExportGamesJob;
 use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Bus;
@@ -35,7 +35,7 @@ class ExportAllGamesFromIGDB extends Command
 
             $jobs = [];
             for ($i = 0; $i < 150; $i++) {
-                $jobs[] = new ExportGamesFromIGDBJob($i, $path);
+                $jobs[] = new ExportGamesJob($i, $path);
             }
 
             $this->withProgressBar($jobs, fn($job) => Bus::dispatch($job));

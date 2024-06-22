@@ -4,8 +4,8 @@ namespace App\Console\Commands;
 
 use App\Actions\Games\FetchGameReleaseDateStatusesAction;
 use App\Actions\Games\FetchGamesAction;
-use App\Jobs\SeedGameReleaseDateStatusesFromIGDBJob;
-use App\Jobs\SeedGamesFromIGDBJob;
+use App\Jobs\SeedGameReleaseDateStatusesJob;
+use App\Jobs\SeedGamesJob;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Bus;
 
@@ -27,14 +27,14 @@ class SeedGameReleaseDateStatuses extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): void
     {
         try {
             $this->info('Seeding all game release date statuses from IGDB...');
 
             $chunkNumber = 0;
             do {
-                $job = new SeedGameReleaseDateStatusesFromIGDBJob($chunkNumber);
+                $job = new SeedGameReleaseDateStatusesJob($chunkNumber);
                 Bus::dispatch($job);
                 $chunkNumber++;
             } while (count(FetchGameReleaseDateStatusesAction::execute($chunkNumber, 'id asc', ['id'])) > 0);

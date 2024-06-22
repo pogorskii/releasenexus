@@ -5,19 +5,21 @@ namespace App\Actions\Games;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class AddGameReleaseDateStatusesToDBAction
+class AddGameReleaseDateStatuses
 {
     public static function execute(array $records): array
     {
         try {
+            $tableName          = 'g_release_date_statuses';
+            $localIdsName       = 'id';
             $writtenRecords     = 0;
             $skippedRecords     = 0;
             $existingRecordsIds = [];
 
             $recordsIds = collect($records)->pluck('id')->toArray();
 
-            DB::transaction(function () use ($recordsIds, &$existingRecordsIds) {
-                $existingRecordsIds = DB::table('g_release_date_statuses')->whereIn('origin_id', $recordsIds)->pluck('origin_id')->toArray();
+            DB::transaction(function () use ($recordsIds, &$existingRecordsIds, $tableName, $localIdsName) {
+                $existingRecordsIds = DB::table($tableName)->whereIn($localIdsName, $recordsIds)->pluck($localIdsName)->toArray();
             });
 
             $newRecords = array_filter($records, function ($record) use ($existingRecordsIds, &$skippedRecords) {
@@ -30,9 +32,9 @@ class AddGameReleaseDateStatusesToDBAction
                 return true;
             });
 
-            $transformedRecords = collect($newRecords)->map(function ($record) {
+            $transformedRecords = collect($newRecords)->map(function ($record) use ($localIdsName) {
                 return [
-                    'id'          => $record['id'],
+                    $localIdsName => $record['id'],
                     'checksum'    => $record['checksum'],
                     'created_at'  => Carbon::createFromTimestamp($record['created_at'])->toDateTimeString(),
                     'description' => $record['description'] ?? null,
@@ -41,7 +43,7 @@ class AddGameReleaseDateStatusesToDBAction
                 ];
             })->toArray();
 
-            $result = DB::table('g_release_date_statuses')->insert($transformedRecords);
+            $result = DB::table($tableName)->insert($transformedRecords);
             if ($result) {
                 $writtenRecords += count($transformedRecords);
             }

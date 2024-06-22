@@ -2,24 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreGameRequest;
-use App\Http\Requests\UpdateGameRequest;
-use App\Models\Game;
-use Inertia\Inertia;
+use App\Http\Requests\StoreGReleaseDateRequest;
+use App\Http\Requests\UpdateGReleaseDateRequest;
+use App\Models\GReleaseDate;
 
-class GameController extends Controller
+class GReleaseDateController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-//        $games = Game::where('release_date', '>=', now()->toDateString())->get();
-        $games = Game::limit(20)->get();
-
-        return Inertia::render('Games/Calendar', [
-            'games' => $games,
-        ]);
+        //
     }
 
     /**
@@ -33,7 +27,7 @@ class GameController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreGameRequest $request)
+    public function store(StoreGReleaseDateRequest $request)
     {
         //
     }
@@ -41,7 +35,7 @@ class GameController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Game $game)
+    public function show(GReleaseDate $gReleaseDate)
     {
         //
     }
@@ -49,7 +43,7 @@ class GameController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Game $game)
+    public function edit(GReleaseDate $gReleaseDate)
     {
         //
     }
@@ -57,7 +51,7 @@ class GameController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateGameRequest $request, Game $game)
+    public function update(UpdateGReleaseDateRequest $request, GReleaseDate $gReleaseDate)
     {
         //
     }
@@ -65,7 +59,7 @@ class GameController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Game $game)
+    public function destroy(GReleaseDate $gReleaseDate)
     {
         //
     }

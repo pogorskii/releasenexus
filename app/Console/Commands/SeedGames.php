@@ -3,12 +3,12 @@
 namespace App\Console\Commands;
 
 use App\Actions\Games\FetchGamesAction;
-use App\Jobs\SeedGamesFromIGDBJob;
+use App\Jobs\SeedGamesJob;
 use Illuminate\Bus\Batch;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Bus;
 
-class SeedGamesFromIGDB extends Command
+class SeedGames extends Command
 {
     /**
      * The name and signature of the console command.
@@ -33,7 +33,7 @@ class SeedGamesFromIGDB extends Command
 
             $chunkNumber = 0;
             do {
-                $job = new SeedGamesFromIGDBJob($chunkNumber);
+                $job = new SeedGamesJob($chunkNumber);
                 Bus::dispatch($job);
                 $chunkNumber++;
             } while (count(FetchGamesAction::execute($chunkNumber, 'id asc', ['id'])) > 0);
