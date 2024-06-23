@@ -17,20 +17,45 @@ class GameController extends Controller
      */
     public function index(int $year, int $month)
     {
-//        $releaseDate = GReleaseDate::with('dateable')->whereYear('date', $year)->whereMonth('date', $month)->get();
-//        Load the dateable relationship
-        $releaseDates = GReleaseDate::whereYear('date', $year)->whereMonth('date', $month)->with('dateable')->get();
+//        $releaseDates = GReleaseDate::with('dateable')->whereYear('date', $year)->whereMonth('date', $month);
 
-//        Group by dateable_id and date
-//        $releaseDays = $releaseDate->groupBy('date')->map(function ($item) {
+//        $releaseDays = $releaseDates->groupBy(['date', 'dateable_id'])->map(function ($item) {
 //            return [
-//                'date'          => $item->first()->date,
-//                'release_dates' => GReleaseDateResource::collection($item->load('dateable'))->resolve(),
+//                'date'     => $item->first()->first()->date,
+//                'releases' => $item->map(function ($release) {
+//                    return [
+//                        'game'          => (new GameResource($release->first()->dateable))->resolve(),
+//                        'release_dates' => $release,
+//                    ];
+//                })->values(),
 //            ];
-//        })->values()->sortBy('date')->values();
+//        })->sortBy('date')->values();
+
+        $releasingOnSpecificDate = GReleaseDate::with('dateable', 'platform')->whereYear('date', $year)->whereMonth('date', $month)->where('category', '0')->get();
+        $formattedReleases       = $releasingOnSpecificDate->groupBy(['date', 'dateable_id'])->map(function ($item) {
+            return [
+                'date'     => $item->first()->first()->date,
+                'releases' => $item->map(function ($release) {
+                    return [
+                        'game'          => (new GameResource($release->first()->dateable))->resolve(),
+                        'release_dates' => $release,
+                    ];
+                })->values(),
+            ];
+        })->sortBy('date')->values();
+
+        $releasingThisMonth   = GReleaseDate::with('dateable', 'platform')->whereYear('date', $year)->whereMonth('date', $month)->where('category', '1')->get();
+        $formattedTBDReleases = $releasingThisMonth->groupBy('dateable_id')->map(function ($item) {
+            return [
+                'game'          => (new GameResource($item->first()->dateable))->resolve(),
+                'release_dates' => $item,
+            ];
+        })->values();
 
         return Inertia::render('Games/Calendar', [
-            'releases' => $releaseDates,
+            'datedReleases' => $formattedReleases,
+            'tbdReleases'   => $formattedTBDReleases,
+
         ]);
     }
 

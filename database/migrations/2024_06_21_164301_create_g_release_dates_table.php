@@ -21,6 +21,7 @@ return new class extends Migration {
             $table->enum('region', ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'])->nullable();
             $table->foreignId('status_id')->nullable()->constrained('g_release_date_statuses');
             $table->unsignedSmallInteger('y')->nullable();
+            $table->foreignId('platform_id')->nullable()->constrained('g_platforms');
             $table->foreignId('dateable_id')->nullable();
             $table->string('dateable_type')->nullable();
             $table->timestamps();

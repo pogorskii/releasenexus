@@ -45,6 +45,7 @@ class AddGameReleaseDatesAction
                     'status_id'     => $record['status'] ?? null,
                     'updated_at'    => Carbon::createFromTimestamp($record['updated_at'])->toDateTimeString(),
                     'y'             => $record['y'] ?? null,
+                    'platform_id'   => $record['platform'] ?? null,
                     'dateable_id'   => $record['game'] ?? null,
                     'dateable_type' => $record['game'] ? 'App\Models\Game' : null,
                 ];

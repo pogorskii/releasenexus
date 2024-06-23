@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class GReleaseDate extends Model
 {
@@ -25,7 +27,12 @@ class GReleaseDate extends Model
         'dateable_type',
     ];
 
-    public function dateable(): \Illuminate\Database\Eloquent\Relations\MorphTo
+    public function platform(): BelongsTo
+    {
+        return $this->belongsTo(GPlatform::class);
+    }
+
+    public function dateable(): MorphTo
     {
         return $this->morphTo('dateable', 'dateable_type', 'dateable_id', 'origin_id');
     }
