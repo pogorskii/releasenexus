@@ -31,7 +31,7 @@ class GameController extends Controller
 //            ];
 //        })->sortBy('date')->values();
 
-        $releasingOnSpecificDate = GReleaseDate::with('dateable', 'platform')->whereYear('date', $year)->whereMonth('date', $month)->where('category', '0')->get();
+        $releasingOnSpecificDate = GReleaseDate::with('dateable.covers', 'platform')->whereYear('date', $year)->whereMonth('date', $month)->where('category', '0')->get();
         $formattedReleases       = $releasingOnSpecificDate->groupBy(['date', 'dateable_id'])->map(function ($item) {
             return [
                 'date'     => $item->first()->first()->date,
@@ -44,7 +44,7 @@ class GameController extends Controller
             ];
         })->sortBy('date')->values();
 
-        $releasingThisMonth   = GReleaseDate::with('dateable', 'platform')->whereYear('date', $year)->whereMonth('date', $month)->where('category', '1')->get();
+        $releasingThisMonth   = GReleaseDate::with('dateable.covers', 'platform')->whereYear('date', $year)->whereMonth('date', $month)->where('category', '1')->get();
         $formattedTBDReleases = $releasingThisMonth->groupBy('dateable_id')->map(function ($item) {
             return [
                 'game'          => (new GameResource($item->first()->dateable))->resolve(),

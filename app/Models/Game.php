@@ -40,4 +40,9 @@ class Game extends Model
     {
         return $this->morphMany(GReleaseDate::class, 'dateable', 'dateable_type', 'dateable_id', 'origin_id');
     }
+
+    public function covers(): MorphMany
+    {
+        return $this->morphMany(GImageable::class, 'imageable')->where('collection', 'covers');
+    }
 }

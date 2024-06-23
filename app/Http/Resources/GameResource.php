@@ -60,6 +60,30 @@ class GameResource extends JsonResource
 //            });
 //        });
 
+        $game['covers'] = $this->whenLoaded('covers', function () {
+            return $this->covers;
+//            return $this->covers->map(function ($cover) {
+//                return [
+//                    'id'    => $cover->id,
+//                    'cover' => $cover,
+//                ];
+//            });
+//            foreach ($this->covers as $cover) {
+//                return [
+//                    'id'            => $cover->id,
+//                    'alpha_channel' => $cover->alpha_channel,
+//                    'animated'      => $cover->animated,
+//                    'checksum'      => $cover->checksum,
+//                    'height'        => $cover->height,
+//                    'image_id'      => $cover->image_id,
+//                    'url'           => $cover->url,
+//                    'width'         => $cover->width,
+//                    'created_at'    => $cover->created_at,
+//                    'updated_at'    => $cover->updated_at,
+//                ];
+//            }
+        });
+
         return $game;
     }
 }

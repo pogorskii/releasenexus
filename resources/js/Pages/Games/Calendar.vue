@@ -77,6 +77,9 @@ const formatDate = (date: string): string => {
                 <div class="grow grid grid-cols-3 gap-2">
                     <div v-for="release in day.releases"
                          class="bg-gray-800 overflow-hidden shadow sm:rounded-lg p-4 min-h-[15rem] flex flex-col justify-between">
+                        <img
+                            :src="'https://images.igdb.com/igdb/image/upload/t_cover_big/' + release.game.covers[0]?.g_image_id + '.jpg'"
+                            alt="Cover image" class="w-full h-fit object-cover"/>
                         <h3 class="text-xl font-semibold mb-2">{{ release.game.name }} ({{ gameTypeMap[release.game.category] }})</h3>
                         <div class="w-full h-[2px] bg-purple-400 mb-2"></div>
                         <div class="flex gap-2 mb-auto">
@@ -85,6 +88,7 @@ const formatDate = (date: string): string => {
                                 {{ releaseDate.platform.abbreviation ?? releaseDate.platform.name }}
                             </div>
                         </div>
+                        <!--                        {{ release.game.covers[0] }}-->
                         <InertiaLink
                             class="px-4 py-2 block bg-purple-400 w-full rounded-lg font-semibold">More info &rarr;
                         </InertiaLink>
