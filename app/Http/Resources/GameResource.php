@@ -60,8 +60,8 @@ class GameResource extends JsonResource
 //            });
 //        });
 
-        $game['covers'] = $this->whenLoaded('covers', function () {
-            return $this->covers;
+        $game['covers'] = $this->whenLoaded('covers', fn () => GImageableResource::collection($this->covers)->resolve());
+//            return $this->covers;
 //            return $this->covers->map(function ($cover) {
 //                return [
 //                    'id'    => $cover->id,
@@ -82,7 +82,7 @@ class GameResource extends JsonResource
 //                    'updated_at'    => $cover->updated_at,
 //                ];
 //            }
-        });
+//        });
 
         return $game;
     }

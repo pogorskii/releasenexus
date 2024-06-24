@@ -43,6 +43,6 @@ class Game extends Model
 
     public function covers(): MorphMany
     {
-        return $this->morphMany(GImageable::class, 'imageable')->where('collection', 'covers');
+        return $this->morphMany(GImageable::class, 'covers', 'imageable_type', 'imageable_id', 'origin_id')->where('collection', 'covers');
     }
 }
