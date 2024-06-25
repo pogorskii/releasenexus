@@ -6,8 +6,8 @@ use App\Actions\Games\IGDB\FetchFromIGDBAction;
 
 class FetchGamesAction
 {
-    public static function execute(int $offsetMultiplier, string $sortingRule = "id asc", array $fields = ['*'], int $limit = 2000): array
+    public static function execute(int $offsetMultiplier, string $sortingRule = "id asc", array $fields = ['*'], int $limit = 2000, string $filter = null): array
     {
-        return FetchFromIGDBAction::execute('games', $offsetMultiplier, $sortingRule, $fields, $limit);
+        return FetchFromIGDBAction::execute('games', $offsetMultiplier, $sortingRule, $fields, $limit, $filter);
     }
 }
