@@ -11,12 +11,13 @@ class GImage extends Model
 {
     use HasFactory;
 
-//    public function cover_of_game(): MorphToMany
-//    {
-//        return $this->morphedByMany(Game::class, 'imageable', 'imageable_type', 'imageable_id', 'image_id')->where('collection', 'covers');
-//    }
+    public function cover_of_game(): MorphToMany
+    {
+        return $this->morphedByMany(Game::class, 'imageable', 'imageable_type', 'imageable_id', 'image_id')->where('collection', 'covers');
+    }
 
-    public function imageable(): HasOne {
+    public function imageable(): HasOne
+    {
         return $this->hasOne(GImageable::class, 'image_id', 'image_id');
     }
 }

@@ -5,14 +5,13 @@ namespace App\Actions\Games;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class AddGameFranchisesAction
+class AddGameCharactersAction
 {
     public static function execute(array $records): array
     {
         try {
-            $tableName           = 'g_franchises';
+            $tableName           = 'g_characters';
             $localIdsName        = 'id';
-            $pivotTableName      = 'game_g_franchise';
             $writtenRecords      = 0;
             $skippedRecords      = 0;
             $existingRecordsIds  = [];
@@ -45,9 +44,8 @@ class AddGameFranchisesAction
                         }
 
                         $pivotRecords[] = [
-                            'g_franchise_id' => $record['id'],
+                            'g_character_id' => $record['id'],
                             'game_id'        => $game,
-                            'main_franchise' => true,
                             'created_at'     => Carbon::now(),
                             'updated_at'     => Carbon::now(),
                         ];
@@ -55,13 +53,18 @@ class AddGameFranchisesAction
                 }
 
                 return [
-                    $localIdsName => $record['id'],
-                    'checksum'    => $record['checksum'],
-                    'name'        => $record['name'],
-                    'slug'        => $record['slug'],
-                    'url'         => $record['url'],
-                    'created_at'  => Carbon::now(),
-                    'updated_at'  => Carbon::now(),
+                    $localIdsName  => $record['id'],
+                    'akas'         => json_encode($record['akas'] ?? []),
+                    'checksum'     => $record['checksum'],
+                    'country_name' => $record['country_name'] ?? null,
+                    'description'  => $record['description'] ?? null,
+                    'gender'       => array_key_exists('gender', $record) ? number_format($record['gender'], 0, '', '') : null,
+                    'name'         => $record['name'],
+                    'slug'         => $record['slug'],
+                    'species'      => array_key_exists('species', $record) ? number_format($record['species'], 0, '', '') : null,
+                    'url'          => $record['url'],
+                    'created_at'   => Carbon::now(),
+                    'updated_at'   => Carbon::now(),
                 ];
             })->toArray();
 
@@ -70,8 +73,8 @@ class AddGameFranchisesAction
                 $writtenRecords += count($transformedRecords);
             }
 
-            collect($pivotRecords)->chunk(500)->each(function ($chunk) use ($pivotTableName, &$writtenRecords, &$skippedRecords) {
-                $result = DB::table($pivotTableName)->insert($chunk->toArray());
+            collect($pivotRecords)->chunk(500)->each(function ($chunk) use (&$writtenRecords, &$skippedRecords) {
+                $result = DB::table('game_g_character')->insert($chunk->toArray());
                 if ($result) {
                     $writtenRecords += count($chunk);
                 }

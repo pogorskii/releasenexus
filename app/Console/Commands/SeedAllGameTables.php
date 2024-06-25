@@ -2,10 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Actions\Games\FetchGamesAction;
-use App\Jobs\SeedGamesJob;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Bus;
 
 class SeedAllGameTables extends Command
 {
@@ -36,6 +33,7 @@ class SeedAllGameTables extends Command
             $this->call('igdb:seed-game-release-dates');
             $this->call('igdb:seed-game-covers');
             $this->call('igdb:seed-game-franchises');
+            $this->call('igdb:seed-game-characters');
 
             $this->newLine();
             $this->info('Finished seeding all game tables.');
