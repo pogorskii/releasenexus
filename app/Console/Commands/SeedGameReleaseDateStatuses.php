@@ -3,9 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Actions\Games\FetchGameReleaseDateStatusesAction;
-use App\Actions\Games\FetchGamesAction;
 use App\Jobs\SeedGameReleaseDateStatusesJob;
-use App\Jobs\SeedGamesJob;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Bus;
 

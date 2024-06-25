@@ -65,10 +65,12 @@ const formatDate = (date: string): string => {
     return new Date(date).toLocaleDateString('en-US', {month: 'long', day: 'numeric'});
 };
 
+const darkMode = true;
+
 // TODO: Handle different regions
 </script>
 <template>
-    <div class="bg-black w-full min-w-full">
+    <div class="bg-black w-full min-w-full" :class="{ dark: darkMode }">
         <div class="flex gap-10">
             <InertiaLink
                 :href="`/games/calendar/${year}/${Number(month) - 1}`"
@@ -82,32 +84,33 @@ const formatDate = (date: string): string => {
         </div>
         <div class="grid grid-cols-1 gap-4">
             <div v-for="day in datedReleases"
-                 class="bg-black p-6 flex gap-6">
+                 class="bg-white dark:bg-black p-6 flex gap-6">
                 <div>
                     <h2 class="text-2xl font-semibold whitespace-nowrap border-b pb-2">{{ formatDate(day.date) }}</h2>
                 </div>
                 <div class="grow grid grid-cols-3 2xl:grid-cols-4 gap-6">
                     <div v-for="release in day.releases"
-                         class="bg-gray-800 overflow-hidden shadow sm:rounded-lg aspect-[3/5] flex flex-col justify-between">
+                         class="bg-gray-800 overflow-hidden shadow sm:rounded-lg aspect-[3/6] flex flex-col justify-between">
                         <div class="relative overflow-hidden">
                             <img
-                                :src="'https://images.igdb.com/igdb/image/upload/t_original/' + release.game.covers[0]?.g_image_id + '.jpg'"
+                                :src="release.game.covers[0] ? 'https://images.igdb.com/igdb/image/upload/t_original/' + release.game.covers[0]?.g_image_id + '.jpg' : '/game-placeholder.webp'"
                                 alt="Cover image"
                                 class="duration-200 ease-in-out hover:scale-105 object-cover w-full"
                                 :width="release.game.covers[0]?.image.width || 600"
                                 :height="release.game.covers[0]?.image.height || 900"
                             />
-                            <div
-                                class="absolute left-2 top-2 z-10 text-black uppercase text-xs bg-white p-2 font-bold rounded-lg bg-opacity-75">{{ gameTypeMap[release.game.category] }}
-                            </div>
+                        </div>
+                        <div
+                            class="w-full h-6 flex items-center justify-center uppercase text-xs font-bold bg-secondary tracking-wide">
+                            {{ gameTypeMap[release.game.category] }}
                         </div>
                         <div class="flex grow flex-col p-6 pb-3">
-                            <h3 class="mb-4 font-semibold text-xl leading-tight">
+                            <h3 class="mb-2 font-semibold text-xl leading-tight">
                                 <InertiaLink
                                     class="hover:text-primary hover:underline hover:decoration-solid hover:underline-offset-4">{{ release.game.name }}
                                 </InertiaLink>
                             </h3>
-                            <div class="w-full h-[2px] bg-purple-400 mb-2"></div>
+                            <div class="w-full h-[1px] bg-primary mb-2"></div>
                             <div class="mb-auto inline-flex flex-wrap gap-2 self-start">
                                 <div v-for="releaseDate in release.release_dates.filter(r => r.region == 8)"
                                      class="text-sm">
@@ -116,7 +119,7 @@ const formatDate = (date: string): string => {
                             </div>
                         </div>
                         <InertiaLink
-                            class="px-4 py-2 block bg-purple-400 w-full font-semibold text-center">More info &rarr;
+                            class="px-4 py-2 block bg-primary/75 hover:bg-primary w-full font-semibold text-center transition-colors duration-100">More info &rarr;
                         </InertiaLink>
                     </div>
                 </div>

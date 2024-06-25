@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Actions\Games\AddGameReleaseDateStatuses;
-use App\Actions\Games\FetchGameReleaseDateStatusesAction;
+use App\Actions\Games\AddGameFranchisesAction;
+use App\Actions\Games\FetchGameFranchisesAction;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,7 +13,7 @@ use Illuminate\Queue\Middleware\RateLimitedWithRedis;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class SeedGameReleaseDateStatusesJob implements ShouldQueue
+class SeedGameFranchisesJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Batchable;
 
@@ -34,12 +34,12 @@ class SeedGameReleaseDateStatusesJob implements ShouldQueue
     public function handle(): void
     {
         try {
-            Log::info('Seeding game release date statuses from IGDB chunk '.$this->chunkNumber.' started.');
-            $records = FetchGameReleaseDateStatusesAction::execute($this->chunkNumber, 'id asc');
-            $result  = AddGameReleaseDateStatuses::execute($records);
-            Log::info('Seeding game release date statuses from IGDB chunk '.$this->chunkNumber.' result: '.json_encode($result));
+            Log::info('Seeding game franchises from IGDB chunk '.$this->chunkNumber.' started.');
+            $records = FetchGameFranchisesAction::execute($this->chunkNumber, 'id asc');
+            $result  = AddGameFranchisesAction::execute($records);
+            Log::info('Seeding game franchises from IGDB chunk '.$this->chunkNumber.' result: '.json_encode($result));
         } catch (\Exception $e) {
-            Log::error('An error occurred while seeding game release date statuses from IGDB chunk '.$this->chunkNumber.': '.$e->getMessage());
+            Log::error('An error occurred while seeding game franchises from IGDB chunk '.$this->chunkNumber.': '.$e->getMessage());
         }
     }
 
