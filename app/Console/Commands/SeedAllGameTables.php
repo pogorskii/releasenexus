@@ -33,11 +33,17 @@ class SeedAllGameTables extends Command
             $this->call('igdb:seed-game-release-dates');
             $this->call('igdb:seed-game-covers');
             $this->call('igdb:seed-game-franchises');
+            $this->call('igdb:connect-game-franchises');
             $this->call('igdb:seed-game-characters');
             $this->call('igdb:seed-game-player-perspectives');
             $this->call('igdb:connect-game-player-perspectives');
             $this->call('igdb:seed-game-character-mug-shots');
             $this->call('igdb:connect-game-character-mug-shots');
+            $this->call('igdb:seed-game-collections');
+            $this->call('igdb:connect-game-collections-from-memberships');
+            $this->call('igdb:connect-game-collections-from-games');
+            $this->call('igdb:seed-game-keywords');
+            $this->call('igdb:connect-game-keywords');
 
             $this->newLine();
             $this->info('Finished seeding all game tables.');

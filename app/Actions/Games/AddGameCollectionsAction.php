@@ -5,18 +5,17 @@ namespace App\Actions\Games;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class AddGameFranchisesAction
+class AddGameCollectionsAction
 {
     public static function execute(array $records): array
     {
         try {
-            $tableName           = 'g_franchises';
-            $localIdsName        = 'id';
-            $pivotTableName      = 'game_g_franchise';
-            $writtenRecords      = 0;
-            $skippedRecords      = 0;
-            $existingRecordsIds  = [];
-            $allExistingGamesIds = DB::table('games')->pluck('origin_id')->toArray();
+            $tableName          = 'g_collections';
+            $localIdsName       = 'id';
+            $writtenRecords     = 0;
+            $skippedRecords     = 0;
+            $existingRecordsIds = [];
+            $existingGamesIds   = DB::table('games')->pluck('origin_id')->toArray();
 
             $recordsIds = collect($records)->pluck('id')->toArray();
 
@@ -36,20 +35,20 @@ class AddGameFranchisesAction
 
             $pivotRecords = [];
 
-            $transformedRecords = collect($newRecords)->map(function ($record) use ($localIdsName, &$pivotRecords, $allExistingGamesIds) {
+            $transformedRecords = collect($newRecords)->map(function ($record) use ($localIdsName, &$pivotRecords, $existingGamesIds) {
                 if (array_key_exists('games', $record) && !empty($record['games'])) {
                     foreach ($record['games'] as $game) {
-                        $gameExists = in_array($game, $allExistingGamesIds);
+                        $gameExists = in_array($game, $existingGamesIds);
                         if (!$gameExists) {
                             continue;
                         }
 
                         $pivotRecords[] = [
-                            'g_franchise_id' => $record['id'],
-                            'game_id'        => $game,
-                            'main_franchise' => false,
-                            'created_at'     => Carbon::now(),
-                            'updated_at'     => Carbon::now(),
+                            'g_collection_id' => $record['id'],
+                            'game_id'         => $game,
+                            'main_collection' => false,
+                            'created_at'      => Carbon::now(),
+                            'updated_at'      => Carbon::now(),
                         ];
                     }
                 }
@@ -70,8 +69,8 @@ class AddGameFranchisesAction
                 $writtenRecords += count($transformedRecords);
             }
 
-            collect($pivotRecords)->chunk(500)->each(function ($chunk) use ($pivotTableName, &$writtenRecords, &$skippedRecords) {
-                $result = DB::table($pivotTableName)->insert($chunk->toArray());
+            collect($pivotRecords)->chunk(500)->each(function ($chunk) use (&$writtenRecords, &$skippedRecords) {
+                $result = DB::table('game_g_collection')->insert($chunk->toArray());
                 if ($result) {
                     $writtenRecords += count($chunk);
                 }

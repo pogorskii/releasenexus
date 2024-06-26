@@ -5,18 +5,16 @@ namespace App\Actions\Games;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class AddGameFranchisesAction
+class AddGameKewordsAction
 {
     public static function execute(array $records): array
     {
         try {
-            $tableName           = 'g_franchises';
-            $localIdsName        = 'id';
-            $pivotTableName      = 'game_g_franchise';
-            $writtenRecords      = 0;
-            $skippedRecords      = 0;
-            $existingRecordsIds  = [];
-            $allExistingGamesIds = DB::table('games')->pluck('origin_id')->toArray();
+            $tableName          = 'g_keywords';
+            $localIdsName       = 'id';
+            $writtenRecords     = 0;
+            $skippedRecords     = 0;
+            $existingRecordsIds = [];
 
             $recordsIds = collect($records)->pluck('id')->toArray();
 
@@ -34,26 +32,7 @@ class AddGameFranchisesAction
                 return true;
             });
 
-            $pivotRecords = [];
-
-            $transformedRecords = collect($newRecords)->map(function ($record) use ($localIdsName, &$pivotRecords, $allExistingGamesIds) {
-                if (array_key_exists('games', $record) && !empty($record['games'])) {
-                    foreach ($record['games'] as $game) {
-                        $gameExists = in_array($game, $allExistingGamesIds);
-                        if (!$gameExists) {
-                            continue;
-                        }
-
-                        $pivotRecords[] = [
-                            'g_franchise_id' => $record['id'],
-                            'game_id'        => $game,
-                            'main_franchise' => false,
-                            'created_at'     => Carbon::now(),
-                            'updated_at'     => Carbon::now(),
-                        ];
-                    }
-                }
-
+            $transformedRecords = collect($newRecords)->map(function ($record) use ($localIdsName, &$pivotRecords) {
                 return [
                     $localIdsName => $record['id'],
                     'checksum'    => $record['checksum'],
@@ -69,13 +48,6 @@ class AddGameFranchisesAction
             if ($result) {
                 $writtenRecords += count($transformedRecords);
             }
-
-            collect($pivotRecords)->chunk(500)->each(function ($chunk) use ($pivotTableName, &$writtenRecords, &$skippedRecords) {
-                $result = DB::table($pivotTableName)->insert($chunk->toArray());
-                if ($result) {
-                    $writtenRecords += count($chunk);
-                }
-            });
 
             return [
                 'written' => $writtenRecords,

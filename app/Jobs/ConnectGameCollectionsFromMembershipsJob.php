@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Actions\Games\AddGameCharacterMugShotsAction;
-use App\Actions\Games\FetchGameCharacterMugShotsAction;
+use App\Actions\Games\ConnectGameCollectionsFromMembershipsAction;
+use App\Actions\Games\FetchGameCollectionMembershipsAction;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,7 +13,7 @@ use Illuminate\Queue\Middleware\RateLimitedWithRedis;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class SeedGameCharacterMugShotsJob implements ShouldQueue
+class ConnectGameCollectionsFromMembershipsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Batchable;
 
@@ -34,12 +34,12 @@ class SeedGameCharacterMugShotsJob implements ShouldQueue
     public function handle(): void
     {
         try {
-            Log::info('Seeding game character mug shots from IGDB chunk '.$this->chunkNumber.' started.');
-            $records = FetchGameCharacterMugShotsAction::execute($this->chunkNumber, 'id asc');
-            $result  = AddGameCharacterMugShotsAction::execute($records);
-            Log::info('Seeding game character mug shots from IGDB chunk '.$this->chunkNumber.' result: '.json_encode($result));
+            Log::info('Connecting game collections from memberships from IGDB chunk '.$this->chunkNumber.' started.');
+            $records = FetchGameCollectionMembershipsAction::execute($this->chunkNumber, 'id asc', ['id, game, collection'], 2000, 'game != null & collection != null');
+            $result  = ConnectGameCollectionsFromMembershipsAction::execute($records);
+            Log::info('Connecting game collections from memberships from IGDB chunk '.$this->chunkNumber.' result: '.json_encode($result));
         } catch (\Exception $e) {
-            Log::error('An error occurred while seeding game character mug shots from IGDB chunk '.$this->chunkNumber.': '.$e->getMessage());
+            Log::error('An error occurred while connecting game collections from memberships from IGDB chunk '.$this->chunkNumber.': '.$e->getMessage());
         }
     }
 

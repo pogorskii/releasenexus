@@ -90,7 +90,7 @@ const darkMode = true;
                 </div>
                 <div class="grow grid grid-cols-3 2xl:grid-cols-4 gap-6">
                     <div v-for="release in day.releases"
-                         class="bg-gray-800 overflow-hidden shadow sm:rounded-lg aspect-[3/6] flex flex-col justify-between">
+                         class="aspect-[1/2] group relative col-span-1 flex flex-col justify-between overflow-hidden rounded-xl bg-white [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] transform-gpu dark:bg-[#0f0f0f] dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">
                         <div class="relative overflow-hidden">
                             <img
                                 :src="release.game.covers[0] ? 'https://images.igdb.com/igdb/image/upload/t_original/' + release.game.covers[0]?.g_image_id + '.jpg' : '/game-placeholder.webp'"
@@ -101,7 +101,7 @@ const darkMode = true;
                             />
                         </div>
                         <div
-                            class="w-full h-6 flex items-center justify-center uppercase text-xs font-bold bg-secondary tracking-wide">
+                            class="w-full h-6 flex items-center justify-center uppercase text-xs font-bold bg-transparent dark:[box-shadow:0_-20px_10px_-20px_hsl(var(--secondary))_inset,0_20px_10px_-20px_hsl(var(--secondary))_inset,20px_0_10px_-20px_hsl(var(--secondary))_inset,-20px_10px_10px_-20px_hsl(var(--secondary))_inset] border border-secondary tracking-wide">
                             {{ gameTypeMap[release.game.category] }}
                         </div>
                         <div class="flex grow flex-col p-6 pb-3">
@@ -110,7 +110,8 @@ const darkMode = true;
                                     class="hover:text-primary hover:underline hover:decoration-solid hover:underline-offset-4">{{ release.game.name }}
                                 </InertiaLink>
                             </h3>
-                            <div class="w-full h-[1px] bg-primary mb-2"></div>
+                            <div
+                                class="w-full h-[1px] bg-primary mb-2 dark:[box-shadow:0_0_10px_1px_hsl(var(--primary))]"></div>
                             <div class="mb-auto inline-flex flex-wrap gap-2 self-start">
                                 <div v-for="releaseDate in release.release_dates.filter(r => r.region == 8)"
                                      class="text-sm">
@@ -119,7 +120,7 @@ const darkMode = true;
                             </div>
                         </div>
                         <InertiaLink
-                            class="px-4 py-2 block bg-primary/75 hover:bg-primary w-full font-semibold text-center transition-colors duration-100">More info &rarr;
+                            class="px-4 py-2 block bg-primary/70 hover:bg-primary w-full font-semibold text-center transition-colors duration-100 dark:[box-shadow:0_-20px_10px_-20px_hsl(var(--primary))_inset,-20px_0px_10px_-20px_hsl(var(--primary))_inset,20px_0_10px_-20px_hsl(var(--primary))_inset]">More info &rarr;
                         </InertiaLink>
                     </div>
                 </div>
