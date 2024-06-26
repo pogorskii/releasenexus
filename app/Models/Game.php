@@ -66,4 +66,24 @@ class Game extends Model
     {
         return $this->belongsToMany(GCollection::class, 'game_g_collection', 'game_id', 'g_collection_id')->withPivot('main_collection', 'type')->withTimestamps();
     }
+
+    public function genres(): BelongsToMany
+    {
+        return $this->belongsToMany(GGenre::class, 'g_genres_games', 'game_id', 'g_genre_id')->withTimestamps();
+    }
+
+    public function keywords(): BelongsToMany
+    {
+        return $this->belongsToMany(GKeyword::class, 'g_game_keyword', 'game_id', 'g_keyword_id')->withTimestamps();
+    }
+
+    public function modes(): BelongsToMany
+    {
+        return $this->belongsToMany(GMode::class, 'game_g_mode', 'game_id', 'g_mode_id')->withTimestamps();
+    }
+
+    public function themes(): BelongsToMany
+    {
+        return $this->belongsToMany(GTheme::class, 'game_g_theme', 'game_id', 'g_theme_id')->withTimestamps();
+    }
 }

@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Actions\Games\AddGameKeywordsAction;
-use App\Actions\Games\FetchGameKeywordsAction;
+use App\Actions\Games\AddGameGenresAction;
+use App\Actions\Games\FetchGameGenresAction;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,7 +13,7 @@ use Illuminate\Queue\Middleware\RateLimitedWithRedis;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class SeedGameKeywordsJob implements ShouldQueue
+class SeedGameGenresJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Batchable;
 
@@ -34,12 +34,12 @@ class SeedGameKeywordsJob implements ShouldQueue
     public function handle(): void
     {
         try {
-            Log::info('Seeding game keywords from IGDB chunk '.$this->chunkNumber.' started.');
-            $records = FetchGameKeywordsAction::execute($this->chunkNumber, 'id asc');
-            $result  = AddGameKeywordsAction::execute($records);
-            Log::info('Seeding game keywords from IGDB chunk '.$this->chunkNumber.' result: '.json_encode($result));
+            Log::info('Seeding game genres from IGDB chunk '.$this->chunkNumber.' started.');
+            $records = FetchGameGenresAction::execute($this->chunkNumber, 'id asc');
+            $result  = AddGameGenresAction::execute($records);
+            Log::info('Seeding game genres from IGDB chunk '.$this->chunkNumber.' result: '.json_encode($result));
         } catch (\Exception $e) {
-            Log::error('An error occurred while seeding game keywords from IGDB chunk '.$this->chunkNumber.': '.$e->getMessage());
+            Log::error('An error occurred while seeding game genres from IGDB chunk '.$this->chunkNumber.': '.$e->getMessage());
         }
     }
 

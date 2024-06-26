@@ -44,6 +44,12 @@ class SeedAllGameTables extends Command
             $this->call('igdb:connect-game-collections-from-games');
             $this->call('igdb:seed-game-keywords');
             $this->call('igdb:connect-game-keywords');
+            $this->call('igdb:seed-game-genres');
+            $this->call('igdb:connect-game-genres');
+            $this->call('igdb:seed-game-modes');
+            $this->call('igdb:connect-game-modes');
+            $this->call('igdb:seed-game-themes');
+            $this->call('igdb:connect-game-themes');
 
             $this->newLine();
             $this->info('Finished seeding all game tables.');

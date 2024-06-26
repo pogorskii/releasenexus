@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class GKeyword extends Model
+class GGenre extends Model
 {
     use HasFactory;
 
@@ -17,6 +17,6 @@ class GKeyword extends Model
 
     public function games(): BelongsToMany
     {
-        return $this->belongsToMany(Game::class, 'g_keywords_games');
+        return $this->belongsToMany(Game::class, 'g_genres_games');
     }
 }
