@@ -30,19 +30,19 @@ class ConnectGamePlayerPerspectives extends Command
     public function handle(): void
     {
         try {
-            $this->info('Connecting all game characters from IGDB...');
+            $this->info('Connecting all game player perspectives from IGDB...');
 
             $chunkNumber = 0;
             do {
                 $job = new ConnectGamePlayerPerspectivesJob($chunkNumber);
                 Bus::dispatch($job);
                 $chunkNumber++;
-            } while (count(FetchGamesAction::execute($chunkNumber, 'id asc', ['id'], 'player_perspectives != null')) > 0);
+            } while (count(FetchGamesAction::execute($chunkNumber, 'id asc', ['id'], 2000, 'player_perspectives != null')) > 0);
 
             $this->newLine();
-            $this->info('Finished connecting all game characters from IGDB.');
+            $this->info('Finished connecting all game player perspectives from IGDB.');
         } catch (\Exception|\Throwable $e) {
-            $this->error('An error occurred while connecting all game characters from IGDB: '.$e->getMessage());
+            $this->error('An error occurred while connecting all game player perspectives from IGDB: '.$e->getMessage());
         }
     }
 }

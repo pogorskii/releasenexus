@@ -51,4 +51,14 @@ class Game extends Model
     {
         return $this->belongsToMany(GFranchise::class, 'game_g_franchise', 'game_id', 'g_franchise_id')->withPivot('main_franchise')->withTimestamps();
     }
+
+    public function player_perspectives(): BelongsToMany
+    {
+        return $this->belongsToMany(GPlayerPerspective::class, 'game_g_player_perspective', 'game_id', 'g_player_perspective_id')->withTimestamps();
+    }
+
+    public function characters(): BelongsToMany
+    {
+        return $this->belongsToMany(GCharacter::class, 'g_game_character', 'game_id', 'g_character_id')->withTimestamps();
+    }
 }

@@ -2,10 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Actions\Games\AddGamePlayerPerspectivesAction;
-use App\Actions\Games\ConnectGamePlayerPerspectivesAction;
-use App\Actions\Games\FetchGamePlayerPerspectivesAction;
-use App\Actions\Games\FetchGamesAction;
+use App\Actions\Games\ConnectGameCharacterMugShotsAction;
+use App\Actions\Games\FetchGameCharactersAction;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,7 +13,7 @@ use Illuminate\Queue\Middleware\RateLimitedWithRedis;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class ConnectGamePlayerPerspectivesJob implements ShouldQueue
+class ConnectGameCharacterMugShotsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Batchable;
 
@@ -36,12 +34,12 @@ class ConnectGamePlayerPerspectivesJob implements ShouldQueue
     public function handle(): void
     {
         try {
-            Log::info('Connecting game player perspectives from IGDB chunk '.$this->chunkNumber.' started.');
-            $records = FetchGamesAction::execute($this->chunkNumber, 'id asc', ['id, player_perspectives'], 2000, 'player_perspectives != null');
-            $result  = ConnectGamePlayerPerspectivesAction::execute($records);
-            Log::info('Connecting game player perspectives from IGDB chunk '.$this->chunkNumber.' result: '.json_encode($result));
+            Log::info('Connecting game character mug shots from IGDB chunk '.$this->chunkNumber.' started.');
+            $records = FetchGameCharactersAction::execute($this->chunkNumber, 'id asc', ['id, mug_shot'], 2000, 'mug_shot != null');
+            $result  = ConnectGameCharacterMugShotsAction::execute($records);
+            Log::info('Connecting game character mug shots from IGDB chunk '.$this->chunkNumber.' result: '.json_encode($result));
         } catch (\Exception $e) {
-            Log::error('An error occurred while connecting game player perspectives from IGDB chunk '.$this->chunkNumber.': '.$e->getMessage());
+            Log::error('An error occurred while connecting game character mug shots from IGDB chunk '.$this->chunkNumber.': '.$e->getMessage());
         }
     }
 

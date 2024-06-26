@@ -15,7 +15,6 @@ class FetchFromIGDBAction
         $fieldsString    = implode(', ', $fields);
         $limitPerRequest = $limit / 4;
         $filterString    = $filter ? " where {$filter};" : '';
-        dd($filterString);
 
         $responses = Http::pool(function (Pool $pool) use ($endpoint, $offsetMultiplier, $fieldsString, $sort, $filterString, $limitPerRequest) {
             for ($i = 0; $i < 4; $i++) {

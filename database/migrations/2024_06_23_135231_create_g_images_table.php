@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('g_images', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('origin_id');
+            $table->string('collection')->default('images');
             $table->boolean('alpha_channel')->default(false);
             $table->boolean('animated')->default(false);
             $table->string('checksum');
@@ -21,7 +22,7 @@ return new class extends Migration {
             $table->string('url');
             $table->unsignedInteger('width')->nullable();
             $table->timestamps();
-            $table->index(['origin_id', 'image_id'], 'g_images_idx');
+            $table->index(['origin_id', 'collection'], 'g_images_idx');
         });
     }
 

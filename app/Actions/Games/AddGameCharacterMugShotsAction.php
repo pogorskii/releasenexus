@@ -5,15 +5,13 @@ namespace App\Actions\Games;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class AddGameCoversAction
+class AddGameCharacterMugShotsAction
 {
     public static function execute(array $records): array
     {
         try {
             $tableName          = 'g_images';
             $localIdsName       = 'origin_id';
-            $morphTableName     = 'g_imageables';
-            $morphLocalIdsName  = 'g_image_id';
             $writtenRecords     = 0;
             $skippedRecords     = 0;
             $existingRecordsIds = [];
@@ -34,21 +32,10 @@ class AddGameCoversAction
                 return true;
             });
 
-            $morphRecords = [];
-
-            $transformedRecords = collect($newRecords)->map(function ($record) use ($localIdsName, &$morphRecords, $morphLocalIdsName) {
-                $morphRecords[] = [
-                    $morphLocalIdsName => $record['image_id'],
-                    'imageable_id'     => $record['game'] ?? null,
-                    'imageable_type'   => 'App\Models\Game',
-                    'collection'       => 'covers',
-                    'created_at'       => Carbon::now(),
-                    'updated_at'       => Carbon::now(),
-                ];
-
+            $transformedRecords = collect($newRecords)->map(function ($record) use ($localIdsName) {
                 return [
                     $localIdsName   => $record['id'],
-                    'collection'    => 'covers',
+                    'collection'    => 'mug_shots',
                     'alpha_channel' => $record['alpha_channel'] ?? false,
                     'animated'      => $record['animated'] ?? false,
                     'checksum'      => $record['checksum'],
@@ -64,11 +51,6 @@ class AddGameCoversAction
             $result = DB::table($tableName)->insert($transformedRecords);
             if ($result) {
                 $writtenRecords += count($transformedRecords);
-            }
-
-            $result = DB::table($morphTableName)->insert($morphRecords);
-            if ($result) {
-                $writtenRecords += count($morphRecords);
             }
 
             return [
