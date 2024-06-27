@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Game extends Model
@@ -47,6 +49,11 @@ class Game extends Model
         return $this->morphMany(GImageable::class, 'covers', 'imageable_type', 'imageable_id', 'origin_id')->where('collection', 'covers');
     }
 
+    public function platforms(): HasManyThrough
+    {
+        return $this->hasManyThrough(GPlatform::class, GReleaseDate::class, 'dateable_id', 'origin_id', 'origin_id', 'platform_id');
+    }
+
     public function franchises(): BelongsToMany
     {
         return $this->belongsToMany(GFranchise::class, 'game_g_franchise', 'game_id', 'g_franchise_id')->withPivot('main_franchise')->withTimestamps();
@@ -85,5 +92,15 @@ class Game extends Model
     public function themes(): BelongsToMany
     {
         return $this->belongsToMany(GTheme::class, 'game_g_theme', 'game_id', 'g_theme_id')->withTimestamps();
+    }
+
+    public function age_ratings(): BelongsToMany
+    {
+        return $this->belongsToMany(GAgeRating::class, 'game_g_age_rating', 'game_id', 'g_age_rating_id')->withTimestamps();
+    }
+
+    public function external_games(): HasMany
+    {
+        return $this->hasMany(GExternalGame::class, 'game_id', 'origin_id');
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Games\ExportGamesToCSVAction;
-use App\Actions\Games\FetchGamesAction;
+use App\Actions\Games\FetchAction;
 use App\Http\Resources\UserResource;
 use App\Models\Game;
 use Exception;
@@ -35,7 +35,7 @@ class TestController extends Controller
 
     public function getCSV()
     {
-        $games = FetchGamesAction::execute(0);
+        $games = FetchAction::execute(0);
         $csv   = ExportGamesToCSVAction::execute($games);
 
         return $csv;

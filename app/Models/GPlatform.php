@@ -14,4 +14,9 @@ class GPlatform extends Model
     {
         return $this->hasMany(GReleaseDate::class);
     }
+
+    public function external_games(): HasMany
+    {
+        return $this->hasMany(GExternalGame::class);
+    }
 }
