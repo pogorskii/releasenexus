@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Games;
 
-use App\Actions\Games\FetchAction;
+use App\Actions\Games\FetchGamesAction;
 use App\Jobs\Games\ConnectFranchisesJob;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Bus;
@@ -35,7 +35,7 @@ class ConnectFranchises extends Command
                 $job = new ConnectFranchisesJob($chunkNumber);
                 Bus::dispatch($job);
                 $chunkNumber++;
-            } while (count(FetchAction::execute($chunkNumber, 'id asc', ['id, franchise, franchises'], 2000, 'franchise != null | franchises != null')) > 0);
+            } while (count(FetchGamesAction::execute($chunkNumber, 'id asc', ['id, franchise, franchises'], 2000, 'franchise != null | franchises != null')) > 0);
 
             $this->newLine();
             $this->info('Finished connecting all game franchises from IGDB.');

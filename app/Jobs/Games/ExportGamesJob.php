@@ -3,7 +3,7 @@
 namespace App\Jobs\Games;
 
 use App\Actions\Games\ExportGamesToCSVAction;
-use App\Actions\Games\FetchAction;
+use App\Actions\Games\FetchGamesAction;
 use Exception;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -37,7 +37,7 @@ class ExportGamesJob implements ShouldQueue
     {
         try {
             Log::info('Exporting games from IGDB chunk '.$this->chunkNumber.' started.');
-            $games  = FetchAction::execute($this->chunkNumber);
+            $games  = FetchGamesAction::execute($this->chunkNumber);
             $result = ExportGamesToCSVAction::execute($games, $this->path);
             Log::info('Exporting games from IGDB chunk '.$this->chunkNumber.' result: '.json_encode($result));
         } catch (Exception $e) {

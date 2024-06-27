@@ -3,7 +3,7 @@
 namespace App\Jobs\Games;
 
 use App\Actions\Games\ConnectGameModesAction;
-use App\Actions\Games\FetchAction;
+use App\Actions\Games\FetchGamesAction;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -35,7 +35,7 @@ class ConnectModesJob implements ShouldQueue
     {
         try {
             Log::info('Connecting game modes from IGDB chunk '.$this->chunkNumber.' started.');
-            $records = FetchAction::execute($this->chunkNumber, 'id asc', ['id, game_modes'], 2000, 'game_modes != null');
+            $records = FetchGamesAction::execute($this->chunkNumber, 'id asc', ['id, game_modes'], 2000, 'game_modes != null');
             $result  = ConnectGameModesAction::execute($records);
             Log::info('Connecting game modes from IGDB chunk '.$this->chunkNumber.' result: '.json_encode($result));
         } catch (\Exception $e) {

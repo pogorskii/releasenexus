@@ -2,8 +2,8 @@
 
 namespace App\Jobs\Games;
 
-use App\Actions\Games\ConnectCollectionsFromGamesAction;
-use App\Actions\Games\FetchGamesAction;
+use App\Actions\Games\AddRegionsAction;
+use App\Actions\Games\FetchRegionsAction;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,7 +13,7 @@ use Illuminate\Queue\Middleware\RateLimitedWithRedis;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class ConnectCollectionsFromGamesJob implements ShouldQueue
+class SeedRegionsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Batchable;
 
@@ -34,12 +34,12 @@ class ConnectCollectionsFromGamesJob implements ShouldQueue
     public function handle(): void
     {
         try {
-            Log::info('Connecting game collections from games from IGDB chunk '.$this->chunkNumber.' started.');
-            $records = FetchGamesAction::execute($this->chunkNumber, 'id asc', ['id, collection, collections'], 2000, 'collection != null | collections != null');
-            $result  = ConnectCollectionsFromGamesAction::execute($records);
-            Log::info('Connecting game collections from games from IGDB chunk '.$this->chunkNumber.' result: '.json_encode($result));
+            Log::info('Seeding game regions from IGDB chunk '.$this->chunkNumber.' started.');
+            $records = FetchRegionsAction::execute($this->chunkNumber, 'id asc', ['*']);
+            $result  = AddRegionsAction::execute($records);
+            Log::info('Seeding game regions from IGDB chunk '.$this->chunkNumber.' result: '.json_encode($result));
         } catch (\Exception $e) {
-            Log::error('An error occurred while connecting game collections from games from IGDB chunk '.$this->chunkNumber.': '.$e->getMessage());
+            Log::error('An error occurred while seeding game regions from IGDB chunk '.$this->chunkNumber.': '.$e->getMessage());
         }
     }
 

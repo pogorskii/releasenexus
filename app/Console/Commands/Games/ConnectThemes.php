@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Games;
 
-use App\Actions\Games\FetchAction;
+use App\Actions\Games\FetchGamesAction;
 use App\Jobs\Games\ConnectThemesJob;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Bus;
@@ -35,7 +35,7 @@ class ConnectThemes extends Command
                 $job = new ConnectThemesJob($chunkNumber);
                 Bus::dispatch($job);
                 $chunkNumber++;
-            } while (count(FetchAction::execute($chunkNumber, 'id asc', ['id, themes'], 2000, 'themes != null')) > 0);
+            } while (count(FetchGamesAction::execute($chunkNumber, 'id asc', ['id, themes'], 2000, 'themes != null')) > 0);
 
             $this->newLine();
             $this->info('Finished connecting all game themes from IGDB.');

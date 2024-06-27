@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Games;
 
-use App\Actions\Games\FetchAction;
+use App\Actions\Games\FetchGamesAction;
 use App\Jobs\Games\ConnectAgeRatingsJob;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Bus;
@@ -35,7 +35,7 @@ class ConnectAgeRatings extends Command
                 $job = new ConnectAgeRatingsJob($chunkNumber);
                 Bus::dispatch($job);
                 $chunkNumber++;
-            } while (count(FetchAction::execute($chunkNumber, 'id asc', ['id, age_ratings'], 2000, 'age_ratings != null')) > 0);
+            } while (count(FetchGamesAction::execute($chunkNumber, 'id asc', ['id, age_ratings'], 2000, 'age_ratings != null')) > 0);
 
             $this->newLine();
             $this->info('Finished connecting all game age ratings from IGDB.');

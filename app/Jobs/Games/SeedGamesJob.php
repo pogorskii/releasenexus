@@ -2,8 +2,8 @@
 
 namespace App\Jobs\Games;
 
-use App\Actions\Games\AddAction;
-use App\Actions\Games\FetchAction;
+use App\Actions\Games\AddGamesAction;
+use App\Actions\Games\FetchGamesAction;
 use Exception;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -36,8 +36,8 @@ class SeedGamesJob implements ShouldQueue
     {
         try {
             Log::info('Seeding games from IGDB chunk '.$this->chunkNumber.' started.');
-            $records = FetchAction::execute($this->chunkNumber, 'id asc', ['*', 'alternative_names.*']);
-            $result  = AddAction::execute($records);
+            $records = FetchGamesAction::execute($this->chunkNumber, 'id asc', ['*', 'alternative_names.*']);
+            $result  = AddGamesAction::execute($records);
             Log::info('Seeding games from IGDB chunk '.$this->chunkNumber.' result: '.json_encode($result));
         } catch (Exception $e) {
             Log::error('An error occurred while seeding games from IGDB chunk '.$this->chunkNumber.': '.$e->getMessage());

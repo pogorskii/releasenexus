@@ -3,7 +3,7 @@
 namespace App\Jobs\Games;
 
 use App\Actions\Games\ConnectGameThemesAction;
-use App\Actions\Games\FetchAction;
+use App\Actions\Games\FetchGamesAction;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -35,7 +35,7 @@ class ConnectThemesJob implements ShouldQueue
     {
         try {
             Log::info('Connecting game themes from IGDB chunk '.$this->chunkNumber.' started.');
-            $records = FetchAction::execute($this->chunkNumber, 'id asc', ['id, themes'], 2000, 'themes != null');
+            $records = FetchGamesAction::execute($this->chunkNumber, 'id asc', ['id, themes'], 2000, 'themes != null');
             $result  = ConnectGameThemesAction::execute($records);
             Log::info('Connecting game themes from IGDB chunk '.$this->chunkNumber.' result: '.json_encode($result));
         } catch (\Exception $e) {

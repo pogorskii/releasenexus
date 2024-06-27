@@ -2,19 +2,19 @@
 
 namespace App\Console\Commands\Games;
 
-use App\Actions\Games\FetchGamesAction;
-use App\Jobs\Games\ConnectGenresJob;
+use App\Actions\Games\FetchLocalizationsAction;
+use App\Jobs\Games\SeedLocalizationsJob;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Bus;
 
-class ConnectGenres extends Command
+class SeedLocalizations extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'igdb:connect-genres';
+    protected $signature = 'igdb:seed-localizations';
     /**
      * The console command description.
      *
@@ -28,19 +28,19 @@ class ConnectGenres extends Command
     public function handle(): void
     {
         try {
-            $this->info('Connecting all game genres from IGDB...');
+            $this->info('Seeding all game localizations from IGDB...');
 
             $chunkNumber = 0;
             do {
-                $job = new ConnectGenresJob($chunkNumber);
+                $job = new SeedLocalizationsJob($chunkNumber);
                 Bus::dispatch($job);
                 $chunkNumber++;
-            } while (count(FetchGamesAction::execute($chunkNumber, 'id asc', ['id, genres'], 2000, 'genres != null')) > 0);
+            } while (count(FetchLocalizationsAction::execute($chunkNumber, 'id asc', ['id'])) > 0);
 
             $this->newLine();
-            $this->info('Finished connecting all game genres from IGDB.');
+            $this->info('Finished seeding all game localizations from IGDB.');
         } catch (\Exception|\Throwable $e) {
-            $this->error('An error occurred while connecting all game genres from IGDB: '.$e->getMessage());
+            $this->error('An error occurred while seeding all game localizations from IGDB: '.$e->getMessage());
         }
     }
 }

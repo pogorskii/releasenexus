@@ -103,4 +103,19 @@ class Game extends Model
     {
         return $this->hasMany(GExternalGame::class, 'game_id', 'origin_id');
     }
+
+    public function multiplayer_modes(): HasMany
+    {
+        return $this->hasMany(GMultiplayerMode::class, 'game_id', 'origin_id');
+    }
+
+    public function language_supports(): HasMany
+    {
+        return $this->hasMany(GLanguageSupport::class, 'g_language_support_id', 'origin_id');
+    }
+
+    public function localizations(): HasMany
+    {
+        return $this->hasMany(GLocalization::class, 'game_id', 'origin_id');
+    }
 }

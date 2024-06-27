@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Games;
 
-use App\Actions\Games\FetchAction;
+use App\Actions\Games\FetchGamesAction;
 use App\Jobs\Games\ConnectPlayerPerspectivesJob;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Bus;
@@ -35,7 +35,7 @@ class ConnectPlayerPerspectives extends Command
                 $job = new ConnectPlayerPerspectivesJob($chunkNumber);
                 Bus::dispatch($job);
                 $chunkNumber++;
-            } while (count(FetchAction::execute($chunkNumber, 'id asc', ['id'], 2000, 'player_perspectives != null')) > 0);
+            } while (count(FetchGamesAction::execute($chunkNumber, 'id asc', ['id'], 2000, 'player_perspectives != null')) > 0);
 
             $this->newLine();
             $this->info('Finished connecting all game player perspectives from IGDB.');

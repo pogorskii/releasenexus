@@ -6,9 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class GMultiplayerMode extends Model
+class GLocalization extends Model
 {
     use HasFactory;
+
+    public function region(): BelongsTo
+    {
+        return $this->belongsTo(GRegion::class, 'g_region_id', 'id');
+    }
 
     public function game(): BelongsTo
     {

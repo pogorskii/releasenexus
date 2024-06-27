@@ -28,7 +28,7 @@ class SeedPlayerPerspectives extends Command
     public function handle(): void
     {
         try {
-            $this->info('Seeding all game characters from IGDB...');
+            $this->info('Seeding all game player perspectives from IGDB...');
 
             $chunkNumber = 0;
             do {
@@ -38,9 +38,9 @@ class SeedPlayerPerspectives extends Command
             } while (count(FetchPlayerPerspectivesAction::execute($chunkNumber, 'id asc', ['id'])) > 0);
 
             $this->newLine();
-            $this->info('Finished seeding all game characters from IGDB.');
+            $this->info('Finished seeding all game player perspectives from IGDB.');
         } catch (\Exception|\Throwable $e) {
-            $this->error('An error occurred while seeding all game characters from IGDB: '.$e->getMessage());
+            $this->error('An error occurred while seeding all game player perspectives from IGDB: '.$e->getMessage());
         }
     }
 }

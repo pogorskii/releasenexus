@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Games;
 
-use App\Actions\Games\FetchAction;
+use App\Actions\Games\FetchGamesAction;
 use App\Jobs\Games\SeedGamesJob;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Bus;
@@ -35,7 +35,7 @@ class SeedGames extends Command
                 $job = new SeedGamesJob($chunkNumber);
                 Bus::dispatch($job);
                 $chunkNumber++;
-            } while (count(FetchAction::execute($chunkNumber, 'id asc', ['id'])) > 0);
+            } while (count(FetchGamesAction::execute($chunkNumber, 'id asc', ['id'])) > 0);
 
             $this->newLine();
             $this->info('Finished seeding all games from IGDB.');

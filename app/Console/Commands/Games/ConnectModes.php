@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Games;
 
-use App\Actions\Games\FetchAction;
+use App\Actions\Games\FetchGamesAction;
 use App\Jobs\Games\ConnectModesJob;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Bus;
@@ -35,7 +35,7 @@ class ConnectModes extends Command
                 $job = new ConnectModesJob($chunkNumber);
                 Bus::dispatch($job);
                 $chunkNumber++;
-            } while (count(FetchAction::execute($chunkNumber, 'id asc', ['id, game_modes'], 2000, 'game_modes != null')) > 0);
+            } while (count(FetchGamesAction::execute($chunkNumber, 'id asc', ['id, game_modes'], 2000, 'game_modes != null')) > 0);
 
             $this->newLine();
             $this->info('Finished connecting all game modes from IGDB.');

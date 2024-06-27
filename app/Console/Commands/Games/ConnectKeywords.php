@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Games;
 
-use App\Actions\Games\FetchAction;
+use App\Actions\Games\FetchGamesAction;
 use App\Jobs\Games\ConnectKeywordsJob;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Bus;
@@ -35,7 +35,7 @@ class ConnectKeywords extends Command
                 $job = new ConnectKeywordsJob($chunkNumber);
                 Bus::dispatch($job);
                 $chunkNumber++;
-            } while (count(FetchAction::execute($chunkNumber, 'id asc', ['id, keywords'], 2000, 'keywords != null')) > 0);
+            } while (count(FetchGamesAction::execute($chunkNumber, 'id asc', ['id, keywords'], 2000, 'keywords != null')) > 0);
 
             $this->newLine();
             $this->info('Finished connecting all game keywords from IGDB.');

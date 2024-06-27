@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Games;
 
-use App\Actions\Games\FetchAction;
+use App\Actions\Games\FetchGamesAction;
 use Illuminate\Console\Command;
 
 class FetchGamesFromIGDB extends Command
@@ -26,8 +26,9 @@ class FetchGamesFromIGDB extends Command
     public function handle(): array
     {
         $this->info('Fetching games from IGDB...');
-        $iteration  = $this->argument('iteration');
-        $games      = FetchAction::execute($iteration);
+        $iteration = $this->argument('iteration');
+        $games     = FetchGamesAction::execute($iteration);
+        dd($games);
         $totalGames = collect($games)->count();
         $this->info("{$totalGames} games fetched from IGDB.");
 

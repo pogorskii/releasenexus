@@ -3,7 +3,7 @@
 namespace App\Jobs\Games;
 
 use App\Actions\Games\ConnectFranchisesAction;
-use App\Actions\Games\FetchAction;
+use App\Actions\Games\FetchGamesAction;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -35,7 +35,7 @@ class ConnectFranchisesJob implements ShouldQueue
     {
         try {
             Log::info('Connecting game franchises from IGDB chunk '.$this->chunkNumber.' started.');
-            $records = FetchAction::execute($this->chunkNumber, 'id asc', ['id, franchise, franchises'], 2000, 'franchise != null | franchises != null');
+            $records = FetchGamesAction::execute($this->chunkNumber, 'id asc', ['id, franchise, franchises'], 2000, 'franchise != null | franchises != null');
             $result  = ConnectFranchisesAction::execute($records);
             Log::info('Connecting game franchises from IGDB chunk '.$this->chunkNumber.' result: '.json_encode($result));
         } catch (\Exception $e) {

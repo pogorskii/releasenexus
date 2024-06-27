@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Games;
 
-use App\Actions\Games\FetchAction;
+use App\Actions\Games\FetchGamesAction;
 use App\Jobs\Games\ConnectCollectionsFromGamesJob;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Bus;
@@ -35,7 +35,7 @@ class ConnectCollectionsFromGames extends Command
                 $job = new ConnectCollectionsFromGamesJob($chunkNumber);
                 Bus::dispatch($job);
                 $chunkNumber++;
-            } while (count(FetchAction::execute($chunkNumber, 'id asc', ['id, collection, collections'], 2000, 'collection != null | collections != null')) > 0);
+            } while (count(FetchGamesAction::execute($chunkNumber, 'id asc', ['id, collection, collections'], 2000, 'collection != null | collections != null')) > 0);
 
             $this->newLine();
             $this->info('Finished connecting all game collections from games from IGDB.');

@@ -3,7 +3,7 @@
 namespace App\Jobs\Games;
 
 use App\Actions\Games\ConnectGameKeywordsAction;
-use App\Actions\Games\FetchAction;
+use App\Actions\Games\FetchGamesAction;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -35,7 +35,7 @@ class ConnectKeywordsJob implements ShouldQueue
     {
         try {
             Log::info('Connecting game keywords from IGDB chunk '.$this->chunkNumber.' started.');
-            $records = FetchAction::execute($this->chunkNumber, 'id asc', ['id, keywords'], 2000, 'keywords != null');
+            $records = FetchGamesAction::execute($this->chunkNumber, 'id asc', ['id, keywords'], 2000, 'keywords != null');
             $result  = ConnectGameKeywordsAction::execute($records);
             Log::info('Connecting game keywords from IGDB chunk '.$this->chunkNumber.' result: '.json_encode($result));
         } catch (\Exception $e) {
