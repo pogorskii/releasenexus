@@ -53,6 +53,7 @@ class SeedAllGameTables extends Command
             $this->call('igdb:seed-age-ratings');
             $this->call('igdb:connect-age-ratings');
             $this->call('igdb:seed-external-games');
+            $this->call('igdb:seed-multiplayer-modes');
 
             $this->newLine();
             $this->info('Finished seeding all game tables.');
