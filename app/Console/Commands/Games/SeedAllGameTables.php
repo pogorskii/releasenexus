@@ -68,6 +68,7 @@ class SeedAllGameTables extends Command
             $this->call('igdb:seed-platform-logos');
             $this->call('igdb:seed-platform-versions');
             $this->call('igdb:connect-platform-versions');
+            $this->call('igdb:seed-platform-version-release-dates');
 
             $this->newLine();
             $this->info('Finished seeding all game tables.');
