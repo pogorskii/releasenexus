@@ -1,0 +1,46 @@
+<?php
+
+namespace App\Console\Commands\Games;
+
+use App\Actions\Games\FetchVideosAction;
+use App\Jobs\Games\SeedVideosJob;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Bus;
+
+class SeedVideos extends Command
+{
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'igdb:seed-videos';
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description';
+
+    /**
+     * Execute the console command.
+     */
+    public function handle(): void
+    {
+        try {
+            $this->info('Seeding all game videos from IGDB...');
+
+            $chunkNumber = 0;
+            do {
+                $job = new SeedVideosJob($chunkNumber);
+                Bus::dispatch($job);
+                $chunkNumber++;
+            } while (count(FetchVideosAction::execute($chunkNumber, 'id asc', ['id'])) > 0);
+
+            $this->newLine();
+            $this->info('Finished seeding all game videos from IGDB.');
+        } catch (\Exception|\Throwable $e) {
+            $this->error('An error occurred while seeding all game videos from IGDB: '.$e->getMessage());
+        }
+    }
+}

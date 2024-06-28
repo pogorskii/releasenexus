@@ -4,11 +4,11 @@ namespace App\Actions\Games;
 
 use App\Actions\Games\IGDB\FetchFromIGDBAction;
 
-class FetchThemesAction
+class FetchVideosAction
 {
     public static function execute(
         int $offsetMultiplier, string $sortingRule = "id asc", array $fields = ['*'], int $limit = 2000
     ): array {
-        return FetchFromIGDBAction::execute('themes', $offsetMultiplier, $sortingRule, $fields, $limit);
+        return FetchFromIGDBAction::execute('game_videos', $offsetMultiplier, $sortingRule, $fields, $limit);
     }
 }

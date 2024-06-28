@@ -70,6 +70,9 @@ class SeedAllGameTables extends Command
             $this->call('igdb:connect-platform-versions');
             $this->call('igdb:seed-platform-version-release-dates');
             $this->call('igdb:connect-platform-version-release-dates');
+            $this->call('igdb:seed-network-types');
+            $this->call('igdb:seed-videos');
+            $this->call('igdb:seed-events');
 
             $this->newLine();
             $this->info('Finished seeding all game tables.');
