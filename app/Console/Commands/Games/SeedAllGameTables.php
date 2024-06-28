@@ -60,6 +60,14 @@ class SeedAllGameTables extends Command
             $this->call('igdb:seed-localizations');
             $this->call('igdb:seed-company-logos');
             $this->call('igdb:seed-company-websites');
+            $this->call('igdb:seed-companies');
+            $this->call('igdb:connect-companies');
+            $this->call('igdb:connect-companies-from-involved-companies');
+            $this->call('igdb:seed-engine-logos');
+            $this->call('igdb:seed-engines');
+            $this->call('igdb:seed-platform-logos');
+            $this->call('igdb:seed-platform-versions');
+            $this->call('igdb:connect-platform-versions');
 
             $this->newLine();
             $this->info('Finished seeding all game tables.');

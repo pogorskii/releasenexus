@@ -14,9 +14,9 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('g_company_id')->constrained('g_companies');
             $table->morphs('companiable');
-            $table->string('role');
+            $table->enum('role', ['developer', 'publisher', 'supporting', 'porting']);
             $table->timestamps();
-            
+
             $table->unique(['g_company_id', 'companiable_id', 'companiable_type', 'role'], 'g_companiables_unique');
         });
     }

@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->enum('change_date_category', [0, 1, 2, 3, 4, 5, 6, 7])->nullable();
             $table->foreignId('changed_company_id')->nullable()->constrained('g_companies');
             $table->uuid('checksum');
-            $table->unsignedInteger('country');
+            $table->unsignedInteger('country')->nullable();
             $table->text('description')->nullable();
             $table->string('name');
             $table->foreignId('parent_company_id')->nullable()->constrained('g_companies');

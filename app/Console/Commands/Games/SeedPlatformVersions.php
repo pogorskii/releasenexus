@@ -2,19 +2,19 @@
 
 namespace App\Console\Commands\Games;
 
-use App\Actions\Games\FetchCollectionsAction;
-use App\Jobs\Games\SeedCollectionsJob;
+use App\Actions\Games\FetchPlatformVersionsAction;
+use App\Jobs\Games\SeedPlatformVersionsJob;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Bus;
 
-class SeedCollections extends Command
+class SeedPlatformVersions extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'igdb:seed-collections';
+    protected $signature = 'igdb:seed-platform-versions';
     /**
      * The console command description.
      *
@@ -28,19 +28,19 @@ class SeedCollections extends Command
     public function handle(): void
     {
         try {
-            $this->info('Seeding all game collections from IGDB...');
+            $this->info('Seeding all game platform versions from IGDB...');
 
             $chunkNumber = 0;
             do {
-                $job = new SeedCollectionsJob($chunkNumber);
+                $job = new SeedPlatformVersionsJob($chunkNumber);
                 Bus::dispatch($job);
                 $chunkNumber++;
-            } while (count(FetchCollectionsAction::execute($chunkNumber, 'id asc', ['id'])) > 0);
+            } while (count(FetchPlatformVersionsAction::execute($chunkNumber, 'id asc', ['id'])) > 0);
 
             $this->newLine();
-            $this->info('Finished seeding all game collections from IGDB.');
+            $this->info('Finished seeding all game platform versions from IGDB.');
         } catch (\Exception|\Throwable $e) {
-            $this->error('An error occurred while seeding all game collections from IGDB: '.$e->getMessage());
+            $this->error('An error occurred while seeding all game platform versions from IGDB: '.$e->getMessage());
         }
     }
 }

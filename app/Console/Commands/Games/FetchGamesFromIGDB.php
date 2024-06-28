@@ -26,9 +26,8 @@ class FetchGamesFromIGDB extends Command
     public function handle(): array
     {
         $this->info('Fetching games from IGDB...');
-        $iteration = $this->argument('iteration');
-        $games     = FetchGamesAction::execute($iteration);
-        dd($games);
+        $iteration  = $this->argument('iteration');
+        $games      = FetchGamesAction::execute($iteration);
         $totalGames = collect($games)->count();
         $this->info("{$totalGames} games fetched from IGDB.");
 
