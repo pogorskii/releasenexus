@@ -32,6 +32,8 @@ class AddPlatformVersionReleaseDates
                 return true;
             });
 
+            dd($records);
+
             $transformedRecords = collect($newRecords)->map(function ($record) use ($localIdsName) {
                 return [
                     $localIdsName   => $record['id'],
