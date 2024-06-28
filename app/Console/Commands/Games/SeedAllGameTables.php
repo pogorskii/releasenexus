@@ -73,6 +73,10 @@ class SeedAllGameTables extends Command
             $this->call('igdb:seed-network-types');
             $this->call('igdb:seed-videos');
             $this->call('igdb:seed-events');
+            $this->call('igdb:seed-event-networks');
+            $this->call('igdb:seed-event-logos');
+            $this->call('igdb:seed-game-websites');
+            $this->call('igdb:seed-screenshots');
 
             $this->newLine();
             $this->info('Finished seeding all game tables.');

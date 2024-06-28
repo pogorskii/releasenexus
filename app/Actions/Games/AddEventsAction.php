@@ -97,10 +97,12 @@ class AddEventsAction
             });
 
             collect($videoablesRecords)->chunk(1000)->each(function ($chunk) use (&$writtenRecords) {
-                $result = DB::table('g_videoables')->insert($chunk->toArray());
-                if ($result) {
-                    $writtenRecords += count($chunk);
-                }
+                $result         = DB::table('g_videoables')->upsert($chunk->toArray(), [
+                    'g_video_id',
+                    'videoable_id',
+                    'videoable_type',
+                ], ['videoable_id', 'created_at', 'updated_at']);
+                $writtenRecords += $result;
             });
 
             return [

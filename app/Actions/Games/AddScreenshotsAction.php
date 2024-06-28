@@ -4,7 +4,7 @@ namespace App\Actions\Games;
 
 use Illuminate\Support\Facades\DB;
 
-class AddEventLogosAction
+class AddScreenshotsAction
 {
     public static function execute(array $records): array
     {
@@ -16,13 +16,11 @@ class AddEventLogosAction
             $writtenRecords     = 0;
             $skippedRecords     = 0;
             $existingRecordsIds = [];
-            $existingEventsIds  = [];
 
             $recordsIds = collect($records)->pluck('image_id')->toArray();
 
-            DB::transaction(function () use ($recordsIds, &$existingRecordsIds, &$existingEventsIds, $tableName, $localIdsName) {
+            DB::transaction(function () use ($recordsIds, &$existingRecordsIds, $tableName, $localIdsName) {
                 $existingRecordsIds = DB::table($tableName)->whereIn('image_id', $recordsIds)->pluck($localIdsName)->toArray();
-                $existingEventsIds  = DB::table('g_events')->pluck('id')->toArray();
             });
 
             $newRecords = array_filter($records, function ($record) use ($existingRecordsIds, &$skippedRecords) {
@@ -37,21 +35,19 @@ class AddEventLogosAction
 
             $morphRecords = [];
 
-            $transformedRecords = collect($newRecords)->map(function ($record) use ($localIdsName, &$morphRecords, $morphLocalIdsName, $existingEventsIds) {
-                $safeEventId = array_key_exists('event', $record) && in_array($record['event'], $existingEventsIds) ? $record['event'] : null;
-
+            $transformedRecords = collect($newRecords)->map(function ($record) use ($localIdsName, &$morphRecords, $morphLocalIdsName) {
                 $morphRecords[] = [
                     $morphLocalIdsName => $record['image_id'],
-                    'imageable_id'     => $safeEventId,
-                    'imageable_type'   => 'App\Models\GEvent',
-                    'collection'       => 'event_logos',
+                    'imageable_id'     => $record['game'] ?? null,
+                    'imageable_type'   => 'App\Models\Game',
+                    'collection'       => 'screenshots',
                     'created_at'       => now(),
                     'updated_at'       => now(),
                 ];
 
                 return [
                     $localIdsName   => $record['id'],
-                    'collection'    => 'event_logos',
+                    'collection'    => 'screenshots',
                     'alpha_channel' => $record['alpha_channel'] ?? false,
                     'animated'      => $record['animated'] ?? false,
                     'checksum'      => $record['checksum'],
@@ -64,18 +60,15 @@ class AddEventLogosAction
                 ];
             })->toArray();
 
-            $result         = DB::table($tableName)->upsert($transformedRecords, ['image_id'], [
-                'created_at',
-                'updated_at',
-            ]);
-            $writtenRecords += $result;
+            $result = DB::table($tableName)->insert($transformedRecords);
+            if ($result) {
+                $writtenRecords += count($transformedRecords);
+            }
 
-            $result         = DB::table($morphTableName)->upsert($morphRecords, [
-                'imageable_id',
-                'imageable_type',
-                $morphLocalIdsName,
-            ], ['imageable_id', 'created_at', 'updated_at']);
-            $writtenRecords += $result;
+            $result = DB::table($morphTableName)->insert($morphRecords);
+            if ($result) {
+                $writtenRecords += count($morphRecords);
+            }
 
             return [
                 'written' => $writtenRecords,
