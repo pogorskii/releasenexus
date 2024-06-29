@@ -14,16 +14,16 @@ class AddCharactersAction
             $writtenRecords      = 0;
             $skippedRecords      = 0;
             $existingRecordsIds  = [];
-            $allExistingGamesIds = DB::table('games')->pluck('id')->toArray();
+            $allExistingGamesIds = DB::table('games')->pluck('id');
 
-            $recordsIds = collect($records)->pluck('id')->toArray();
+            $recordsIds = collect($records)->pluck('id');
 
             DB::transaction(function () use ($recordsIds, &$existingRecordsIds, $tableName, $localIdsName) {
-                $existingRecordsIds = DB::table($tableName)->whereIn($localIdsName, $recordsIds)->pluck($localIdsName)->toArray();
+                $existingRecordsIds = DB::table($tableName)->whereIn($localIdsName, $recordsIds)->pluck($localIdsName);
             });
 
-            $newRecords = array_filter($records, function ($record) use ($existingRecordsIds, &$skippedRecords) {
-                if (in_array($record['id'], $existingRecordsIds)) {
+            $newRecords = collect($records)->filter(function ($record) use ($existingRecordsIds, &$skippedRecords) {
+                if ($existingRecordsIds->contains($record['id'])) {
                     $skippedRecords++;
 
                     return false;
@@ -34,10 +34,10 @@ class AddCharactersAction
 
             $pivotRecords = [];
 
-            $transformedRecords = collect($newRecords)->map(function ($record) use ($localIdsName, &$pivotRecords, $allExistingGamesIds) {
+            $transformedRecords = $newRecords->map(function ($record) use ($localIdsName, &$pivotRecords, $allExistingGamesIds) {
                 if (array_key_exists('games', $record) && !empty($record['games'])) {
                     foreach ($record['games'] as $game) {
-                        $gameExists = in_array($game, $allExistingGamesIds);
+                        $gameExists = $allExistingGamesIds->contains($game);
                         if (!$gameExists) {
                             continue;
                         }
@@ -65,9 +65,9 @@ class AddCharactersAction
                     'created_at'   => now(),
                     'updated_at'   => now(),
                 ];
-            })->toArray();
+            });
 
-            $result = DB::table($tableName)->insert($transformedRecords);
+            $result = DB::table($tableName)->insert($transformedRecords->toArray());
             if ($result) {
                 $writtenRecords += count($transformedRecords);
             }

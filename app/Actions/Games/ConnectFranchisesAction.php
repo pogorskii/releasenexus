@@ -10,6 +10,7 @@ class ConnectFranchisesAction
     {
         try {
             $writtenRecords       = 0;
+            $skippedRecords       = 0;
             $existingGameIds      = [];
             $existingFranchiseIds = [];
 

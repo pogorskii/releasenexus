@@ -2,7 +2,6 @@
 
 namespace App\Actions\Games;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class AddKeywordsAction
@@ -39,8 +38,8 @@ class AddKeywordsAction
                     'name'        => $record['name'],
                     'slug'        => $record['slug'],
                     'url'         => $record['url'],
-                    'created_at'  => Carbon::now(),
-                    'updated_at'  => Carbon::now(),
+                    'created_at'  => now(),
+                    'updated_at'  => now(),
                 ];
             })->toArray();
 

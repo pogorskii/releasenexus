@@ -2,7 +2,6 @@
 
 namespace App\Actions\Games;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class ConnectCollectionsFromGamesAction
@@ -11,11 +10,12 @@ class ConnectCollectionsFromGamesAction
     {
         try {
             $writtenRecords        = 0;
+            $skippedRecords        = 0;
             $existingGameIds       = [];
             $existingCollectionIds = [];
 
             DB::transaction(function () use (&$existingGameIds, &$existingCollectionIds) {
-                $existingGameIds       = DB::table('games')->pluck('origin_id')->toArray();
+                $existingGameIds       = DB::table('games')->pluck('id')->toArray();
                 $existingCollectionIds = DB::table('g_collections')->pluck('id')->toArray();
             });
 
@@ -34,8 +34,8 @@ class ConnectCollectionsFromGamesAction
                         'game_id'         => $record['id'],
                         'g_collection_id' => $record['collection'],
                         'main_collection' => true,
-                        'created_at'      => Carbon::now(),
-                        'updated_at'      => Carbon::now(),
+                        'created_at'      => now(),
+                        'updated_at'      => now(),
                     ];
                 }
 
@@ -49,8 +49,8 @@ class ConnectCollectionsFromGamesAction
                             'game_id'         => $record['id'],
                             'g_collection_id' => $collection,
                             'main_collection' => false,
-                            'created_at'      => Carbon::now(),
-                            'updated_at'      => Carbon::now(),
+                            'created_at'      => now(),
+                            'updated_at'      => now(),
                         ];
                     }
                 }

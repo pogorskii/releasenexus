@@ -10,6 +10,7 @@ class ConnectCompaniesAction
     {
         try {
             $writtenRecords       = 0;
+            $skippedRecords       = 0;
             $existingCompaniesIds = DB::table('g_companies')->pluck('id')->toArray();
 
             $connectRecords = [];

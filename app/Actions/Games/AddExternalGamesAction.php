@@ -2,7 +2,6 @@
 
 namespace App\Actions\Games;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class AddExternalGamesAction
@@ -23,7 +22,7 @@ class AddExternalGamesAction
             DB::transaction(function () use ($recordsIds, &$existingRecordsIds, &$existingPlatformsIds, &$existingGamesIds, $tableName, $localIdsName) {
                 $existingRecordsIds   = DB::table($tableName)->whereIn($localIdsName, $recordsIds)->pluck($localIdsName)->toArray();
                 $existingPlatformsIds = DB::table('g_platforms')->pluck('id')->toArray();
-                $existingGamesIds     = DB::table('games')->pluck('origin_id')->toArray();
+                $existingGamesIds     = DB::table('games')->pluck('id')->toArray();
             });
 
             $newRecords = array_filter($records, function ($record) use ($existingRecordsIds, &$skippedRecords) {
@@ -43,8 +42,8 @@ class AddExternalGamesAction
                     $pivotRecords[] = [
                         'g_external_game_id' => $record['id'],
                         'g_platform_id'      => $record['platform'],
-                        'created_at'         => Carbon::now(),
-                        'updated_at'         => Carbon::now(),
+                        'created_at'         => now(),
+                        'updated_at'         => now(),
                     ];
                 }
 
@@ -59,8 +58,8 @@ class AddExternalGamesAction
                     'uid'         => $record['uid'] ?? null,
                     'url'         => $record['url'] ?? null,
                     'year'        => $record['year'] ?? null,
-                    'created_at'  => Carbon::now(),
-                    'updated_at'  => Carbon::now(),
+                    'created_at'  => now(),
+                    'updated_at'  => now(),
                 ];
             })->toArray();
 

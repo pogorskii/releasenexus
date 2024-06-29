@@ -2,7 +2,6 @@
 
 namespace App\Actions\Games;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class AddAgeRatingsAction
@@ -16,14 +15,14 @@ class AddAgeRatingsAction
             $skippedRecords     = 0;
             $existingRecordsIds = [];
 
-            $recordsIds = collect($records)->pluck('id')->toArray();
+            $recordsIds = collect($records)->pluck('id');
 
             DB::transaction(function () use ($recordsIds, &$existingRecordsIds, $tableName, $localIdsName) {
-                $existingRecordsIds = DB::table($tableName)->whereIn($localIdsName, $recordsIds)->pluck($localIdsName)->toArray();
+                $existingRecordsIds = DB::table($tableName)->whereIn($localIdsName, $recordsIds)->pluck($localIdsName);
             });
 
-            $newRecords = array_filter($records, function ($record) use ($existingRecordsIds, &$skippedRecords) {
-                if (in_array($record['id'], $existingRecordsIds) || !array_key_exists('category', $record) || !array_key_exists('rating', $record)) {
+            $newRecords = collect($records)->filter(function ($record) use ($existingRecordsIds, &$skippedRecords) {
+                if ($existingRecordsIds->contains($record['id']) || !array_key_exists('category', $record) || !array_key_exists('rating', $record)) {
                     $skippedRecords++;
 
                     return false;
@@ -32,7 +31,7 @@ class AddAgeRatingsAction
                 return true;
             });
 
-            $transformedRecords = collect($newRecords)->map(function ($record) use ($localIdsName) {
+            $transformedRecords = $newRecords->map(function ($record) use ($localIdsName) {
                 return [
                     $localIdsName          => $record['id'],
                     'category'             => number_format($record['category'], 0, '', ''),
@@ -41,12 +40,12 @@ class AddAgeRatingsAction
                     'rating'               => number_format($record['rating'], 0, '', ''),
                     'rating_cover_url'     => $record['rating_cover_url'] ?? null,
                     'synopsis'             => $record['synopsis'] ?? null,
-                    'created_at'           => Carbon::now(),
-                    'updated_at'           => Carbon::now(),
+                    'created_at'           => now(),
+                    'updated_at'           => now(),
                 ];
-            })->toArray();
+            });
 
-            $result = DB::table($tableName)->insert($transformedRecords);
+            $result = DB::table($tableName)->insert($transformedRecords->toArray());
             if ($result) {
                 $writtenRecords += count($transformedRecords);
             }

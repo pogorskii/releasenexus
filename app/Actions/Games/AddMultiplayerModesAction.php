@@ -2,7 +2,6 @@
 
 namespace App\Actions\Games;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class AddMultiplayerModesAction
@@ -22,7 +21,7 @@ class AddMultiplayerModesAction
 
             DB::transaction(function () use ($recordsIds, &$existingRecordsIds, &$existingGameIds, &$existingPlatformIds, $tableName, $localIdsName) {
                 $existingRecordsIds  = DB::table($tableName)->whereIn($localIdsName, $recordsIds)->pluck($localIdsName)->toArray();
-                $existingGameIds     = DB::table('games')->pluck('origin_id')->toArray();
+                $existingGameIds     = DB::table('games')->pluck('id')->toArray();
                 $existingPlatformIds = DB::table('g_platforms')->pluck('id')->toArray();
             });
 
@@ -56,8 +55,8 @@ class AddMultiplayerModesAction
                     'g_platform_id'      => $safePlatformId,
                     'splitscreen'        => $record['splitscreen'] ?? null,
                     'splitscreen_online' => $record['splitscreenonline'] ?? null,
-                    'created_at'         => Carbon::now(),
-                    'updated_at'         => Carbon::now(),
+                    'created_at'         => now(),
+                    'updated_at'         => now(),
                 ];
             })->toArray();
 

@@ -27,7 +27,7 @@ class AddCompaniesAction
                 $existingWebsites           = DB::table('g_websites')->where('websiteable_type', 'App\Models\GCompany')->get()->toArray();
                 $existingCompanyLogosIds    = DB::table('g_images')->where('collection', 'company_logos')->pluck('origin_id')->toArray();
                 $existingImageables         = DB::table('g_imageables')->where('imageable_type', 'App\Models\GCompany')->get()->toArray();
-                $existingGamesIds           = DB::table('games')->pluck('origin_id')->toArray();
+                $existingGamesIds           = DB::table('games')->pluck('id')->toArray();
             });
 
             $newRecords = array_filter($records, function ($record) use ($existingRecordsIds, &$skippedRecords) {
@@ -53,8 +53,8 @@ class AddCompaniesAction
                         'imageable_id'   => $record['id'],
                         'imageable_type' => 'App\Models\GCompany',
                         'collection'     => 'company_logos',
-                        'created_at'     => Carbon::now(),
-                        'updated_at'     => Carbon::now(),
+                        'created_at'     => now(),
+                        'updated_at'     => now(),
                     ];
                 }
 
@@ -74,8 +74,8 @@ class AddCompaniesAction
                             'url'              => $websiteRecord->url,
                             'websiteable_id'   => $record['id'],
                             'websiteable_type' => 'App\Models\GCompany',
-                            'created_at'       => Carbon::now(),
-                            'updated_at'       => Carbon::now(),
+                            'created_at'       => now(),
+                            'updated_at'       => now(),
                         ];
                     }
                 }
@@ -91,8 +91,8 @@ class AddCompaniesAction
                             'companiable_id'   => $game,
                             'companiable_type' => 'App\Models\Game',
                             'role'             => 'developer',
-                            'created_at'       => Carbon::now(),
-                            'updated_at'       => Carbon::now(),
+                            'created_at'       => now(),
+                            'updated_at'       => now(),
                         ];
                     }
                 }
@@ -108,8 +108,8 @@ class AddCompaniesAction
                             'companiable_id'   => $game,
                             'companiable_type' => 'App\Models\Game',
                             'role'             => 'publisher',
-                            'created_at'       => Carbon::now(),
-                            'updated_at'       => Carbon::now(),
+                            'created_at'       => now(),
+                            'updated_at'       => now(),
                         ];
                     }
                 }
@@ -126,8 +126,8 @@ class AddCompaniesAction
                     'start_date'           => array_key_exists('start_date', $record) ? Carbon::createFromTimestamp($record['start_date'])->toDateTimeString() : null,
                     'start_date_category'  => array_key_exists('start_date_category', $record) ? number_format($record['start_date_category'], 0, '', '') : null,
                     'url'                  => $record['url'] ?? null,
-                    'created_at'           => Carbon::now(),
-                    'updated_at'           => Carbon::now(),
+                    'created_at'           => now(),
+                    'updated_at'           => now(),
                 ];
             })->toArray();
 

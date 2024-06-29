@@ -2,7 +2,6 @@
 
 namespace App\Actions\Games;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class AddCollectionsAction
@@ -15,16 +14,16 @@ class AddCollectionsAction
             $writtenRecords     = 0;
             $skippedRecords     = 0;
             $existingRecordsIds = [];
-            $existingGamesIds   = DB::table('games')->pluck('origin_id')->toArray();
+            $existingGamesIds   = DB::table('games')->pluck('id');
 
-            $recordsIds = collect($records)->pluck('id')->toArray();
+            $recordsIds = collect($records)->pluck('id');
 
             DB::transaction(function () use ($recordsIds, &$existingRecordsIds, $tableName, $localIdsName) {
-                $existingRecordsIds = DB::table($tableName)->whereIn($localIdsName, $recordsIds)->pluck($localIdsName)->toArray();
+                $existingRecordsIds = DB::table($tableName)->whereIn($localIdsName, $recordsIds)->pluck($localIdsName);
             });
 
             $newRecords = array_filter($records, function ($record) use ($existingRecordsIds, &$skippedRecords) {
-                if (in_array($record['id'], $existingRecordsIds)) {
+                if ($existingRecordsIds->contains($record['id'])) {
                     $skippedRecords++;
 
                     return false;
@@ -38,8 +37,7 @@ class AddCollectionsAction
             $transformedRecords = collect($newRecords)->map(function ($record) use ($localIdsName, &$pivotRecords, $existingGamesIds) {
                 if (array_key_exists('games', $record) && !empty($record['games'])) {
                     foreach ($record['games'] as $game) {
-                        $gameExists = in_array($game, $existingGamesIds);
-                        if (!$gameExists) {
+                        if (!$existingGamesIds->contains($game)) {
                             continue;
                         }
 
@@ -47,8 +45,8 @@ class AddCollectionsAction
                             'g_collection_id' => $record['id'],
                             'game_id'         => $game,
                             'main_collection' => false,
-                            'created_at'      => Carbon::now(),
-                            'updated_at'      => Carbon::now(),
+                            'created_at'      => now(),
+                            'updated_at'      => now(),
                         ];
                     }
                 }
@@ -59,12 +57,12 @@ class AddCollectionsAction
                     'name'        => $record['name'],
                     'slug'        => $record['slug'],
                     'url'         => $record['url'],
-                    'created_at'  => Carbon::now(),
-                    'updated_at'  => Carbon::now(),
+                    'created_at'  => now(),
+                    'updated_at'  => now(),
                 ];
-            })->toArray();
+            });
 
-            $result = DB::table($tableName)->insert($transformedRecords);
+            $result = DB::table($tableName)->insert($transformedRecords->toArray());
             if ($result) {
                 $writtenRecords += count($transformedRecords);
             }

@@ -2,7 +2,6 @@
 
 namespace App\Actions\Games;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class ConnectGameModesAction
@@ -15,7 +14,7 @@ class ConnectGameModesAction
             $existingModeIds = [];
 
             DB::transaction(function () use (&$existingGameIds, &$existingModeIds) {
-                $existingGameIds = DB::table('games')->pluck('origin_id')->toArray();
+                $existingGameIds = DB::table('games')->pluck('id')->toArray();
                 $existingModeIds = DB::table('g_modes')->pluck('id')->toArray();
             });
 
@@ -34,8 +33,8 @@ class ConnectGameModesAction
                     $pivotRecords[] = [
                         'game_id'    => $record['id'],
                         'g_mode_id'  => $mode,
-                        'created_at' => Carbon::now(),
-                        'updated_at' => Carbon::now(),
+                        'created_at' => now(),
+                        'updated_at' => now(),
                     ];
                 }
             });

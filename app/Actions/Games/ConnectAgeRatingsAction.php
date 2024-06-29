@@ -2,7 +2,6 @@
 
 namespace App\Actions\Games;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class ConnectAgeRatingsAction
@@ -11,11 +10,12 @@ class ConnectAgeRatingsAction
     {
         try {
             $writtenRecords       = 0;
+            $skippedRecords       = 0;
             $existingGameIds      = [];
             $existingAgeRatingIds = [];
 
             DB::transaction(function () use (&$existingGameIds, &$existingAgeRatingIds) {
-                $existingGameIds      = DB::table('games')->pluck('origin_id')->toArray();
+                $existingGameIds      = DB::table('games')->pluck('id')->toArray();
                 $existingAgeRatingIds = DB::table('g_age_ratings')->pluck('id')->toArray();
             });
 
@@ -34,8 +34,8 @@ class ConnectAgeRatingsAction
                     $pivotRecords[] = [
                         'game_id'         => $record['id'],
                         'g_age_rating_id' => $ageRating,
-                        'created_at'      => Carbon::now(),
-                        'updated_at'      => Carbon::now(),
+                        'created_at'      => now(),
+                        'updated_at'      => now(),
                     ];
                 }
             });

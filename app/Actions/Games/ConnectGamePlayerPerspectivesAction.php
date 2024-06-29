@@ -2,7 +2,6 @@
 
 namespace App\Actions\Games;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class ConnectGamePlayerPerspectivesAction
@@ -11,7 +10,8 @@ class ConnectGamePlayerPerspectivesAction
     {
         try {
             $writtenRecords      = 0;
-            $allExistingGamesIds = DB::table('games')->pluck('origin_id')->toArray();
+            $skippedRecords      = 0;
+            $allExistingGamesIds = DB::table('games')->pluck('id')->toArray();
             $pivotRecords        = [];
 
             collect($records)->map(function ($record) use (&$pivotRecords, $allExistingGamesIds) {
@@ -23,8 +23,8 @@ class ConnectGamePlayerPerspectivesAction
                     $pivotRecords[] = [
                         'game_id'                 => $record['id'],
                         'g_player_perspective_id' => $perspective,
-                        'created_at'              => Carbon::now(),
-                        'updated_at'              => Carbon::now(),
+                        'created_at'              => now(),
+                        'updated_at'              => now(),
                     ];
                 }
             });

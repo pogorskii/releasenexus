@@ -2,7 +2,6 @@
 
 namespace App\Actions\Games;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class ConnectGenresAction
@@ -15,7 +14,7 @@ class ConnectGenresAction
             $existingGenreIds = [];
 
             DB::transaction(function () use (&$existingGameIds, &$existingGenreIds) {
-                $existingGameIds  = DB::table('games')->pluck('origin_id')->toArray();
+                $existingGameIds  = DB::table('games')->pluck('id')->toArray();
                 $existingGenreIds = DB::table('g_genres')->pluck('id')->toArray();
             });
 
@@ -34,8 +33,8 @@ class ConnectGenresAction
                     $pivotRecords[] = [
                         'game_id'    => $record['id'],
                         'g_genre_id' => $genre,
-                        'created_at' => Carbon::now(),
-                        'updated_at' => Carbon::now(),
+                        'created_at' => now(),
+                        'updated_at' => now(),
                     ];
                 }
             });

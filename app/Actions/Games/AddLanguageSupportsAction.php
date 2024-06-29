@@ -2,7 +2,6 @@
 
 namespace App\Actions\Games;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class AddLanguageSupportsAction
@@ -21,7 +20,7 @@ class AddLanguageSupportsAction
 
             DB::transaction(function () use ($recordsIds, &$existingRecordsIds, &$existingGameIds, $tableName, $localIdsName) {
                 $existingRecordsIds = DB::table($tableName)->whereIn($localIdsName, $recordsIds)->pluck($localIdsName)->toArray();
-                $existingGameIds    = DB::table('games')->pluck('origin_id')->toArray();
+                $existingGameIds    = DB::table('games')->pluck('id')->toArray();
             });
 
             $newRecords = array_filter($records, function ($record) use ($existingRecordsIds, $existingGameIds, &$skippedRecords) {
@@ -41,8 +40,8 @@ class AddLanguageSupportsAction
                     'game_id'       => $record['game'],
                     'g_language_id' => $record['language'],
                     'support_type'  => array_key_exists('language_support_type', $record) ? number_format($record['language_support_type'], 0, '', '') : null,
-                    'created_at'    => Carbon::now(),
-                    'updated_at'    => Carbon::now(),
+                    'created_at'    => now(),
+                    'updated_at'    => now(),
                 ];
             })->toArray();
 

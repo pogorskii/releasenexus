@@ -20,7 +20,7 @@ class AddVideosAction
 
             DB::transaction(function () use ($recordsIds, &$existingRecordsIds, &$existingGamesIds, $tableName, $localIdsName) {
                 $existingRecordsIds = DB::table($tableName)->whereIn($localIdsName, $recordsIds)->pluck($localIdsName)->toArray();
-                $existingGamesIds   = DB::table('games')->pluck('origin_id')->toArray();
+                $existingGamesIds   = DB::table('games')->pluck('id')->toArray();
             });
 
             $newRecords = array_filter($records, function ($record) use ($existingRecordsIds, &$skippedRecords) {

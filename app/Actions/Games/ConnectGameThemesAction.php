@@ -2,7 +2,6 @@
 
 namespace App\Actions\Games;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class ConnectGameThemesAction
@@ -15,7 +14,7 @@ class ConnectGameThemesAction
             $existingThemeIds = [];
 
             DB::transaction(function () use (&$existingGameIds, &$existingThemeIds) {
-                $existingGameIds  = DB::table('games')->pluck('origin_id')->toArray();
+                $existingGameIds  = DB::table('games')->pluck('id')->toArray();
                 $existingThemeIds = DB::table('g_themes')->pluck('id')->toArray();
             });
 
@@ -34,8 +33,8 @@ class ConnectGameThemesAction
                     $pivotRecords[] = [
                         'game_id'    => $record['id'],
                         'g_theme_id' => $theme,
-                        'created_at' => Carbon::now(),
-                        'updated_at' => Carbon::now(),
+                        'created_at' => now(),
+                        'updated_at' => now(),
                     ];
                 }
             });

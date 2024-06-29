@@ -2,7 +2,6 @@
 
 namespace App\Actions\Games;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class AddCompanyLogosAction
@@ -42,8 +41,8 @@ class AddCompanyLogosAction
                     'imageable_id'     => null,
                     'imageable_type'   => 'App\Models\GCompany',
                     'collection'       => 'company_logos',
-                    'created_at'       => Carbon::now(),
-                    'updated_at'       => Carbon::now(),
+                    'created_at'       => now(),
+                    'updated_at'       => now(),
                 ];
 
                 return [
@@ -56,8 +55,8 @@ class AddCompanyLogosAction
                     'image_id'      => $record['image_id'],
                     'url'           => $record['url'],
                     'width'         => $record['width'] ?? null,
-                    'created_at'    => Carbon::now(),
-                    'updated_at'    => Carbon::now(),
+                    'created_at'    => now(),
+                    'updated_at'    => now(),
                 ];
             })->toArray();
 

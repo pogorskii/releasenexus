@@ -2,7 +2,6 @@
 
 namespace App\Actions\Games;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class AddFranchisesAction
@@ -16,7 +15,7 @@ class AddFranchisesAction
             $writtenRecords      = 0;
             $skippedRecords      = 0;
             $existingRecordsIds  = [];
-            $allExistingGamesIds = DB::table('games')->pluck('origin_id')->toArray();
+            $allExistingGamesIds = DB::table('games')->pluck('id')->toArray();
 
             $recordsIds = collect($records)->pluck('id')->toArray();
 
@@ -48,8 +47,8 @@ class AddFranchisesAction
                             'g_franchise_id' => $record['id'],
                             'game_id'        => $game,
                             'main_franchise' => false,
-                            'created_at'     => Carbon::now(),
-                            'updated_at'     => Carbon::now(),
+                            'created_at'     => now(),
+                            'updated_at'     => now(),
                         ];
                     }
                 }
@@ -60,8 +59,8 @@ class AddFranchisesAction
                     'name'        => $record['name'],
                     'slug'        => $record['slug'],
                     'url'         => $record['url'],
-                    'created_at'  => Carbon::now(),
-                    'updated_at'  => Carbon::now(),
+                    'created_at'  => now(),
+                    'updated_at'  => now(),
                 ];
             })->toArray();
 

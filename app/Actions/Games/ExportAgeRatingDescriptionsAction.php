@@ -8,7 +8,7 @@ use League\Csv\Exception;
 use League\Csv\UnavailableStream;
 use League\Csv\Writer;
 
-class ExportAgeRatingDescriptionsToCSVAction
+class ExportAgeRatingDescriptionsAction
 {
     /**
      * @throws UnavailableStream

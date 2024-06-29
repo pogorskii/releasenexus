@@ -10,6 +10,7 @@ class ConnectPlatformVersionsAction
     {
         try {
             $writtenRecords      = 0;
+            $skippedRecords      = 0;
             $existingPlatformIds = [];
             $existingVersionIds  = [];
 

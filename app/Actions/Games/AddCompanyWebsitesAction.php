@@ -2,7 +2,6 @@
 
 namespace App\Actions\Games;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class AddCompanyWebsitesAction
@@ -40,8 +39,8 @@ class AddCompanyWebsitesAction
                     'trusted'          => $record['trusted'] ?? false,
                     'url'              => $record['url'],
                     'websiteable_type' => 'App\Models\GCompany',
-                    'created_at'       => Carbon::now(),
-                    'updated_at'       => Carbon::now(),
+                    'created_at'       => now(),
+                    'updated_at'       => now(),
                 ];
             })->toArray();
 

@@ -2,7 +2,6 @@
 
 namespace App\Actions\Games;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class ConnectCharacterMugShotsAction
@@ -11,6 +10,7 @@ class ConnectCharacterMugShotsAction
     {
         try {
             $writtenRecords        = 0;
+            $skippedRecords        = 0;
             $existingCharactersIds = [];
             $existingMugShots      = [];
 
@@ -31,8 +31,8 @@ class ConnectCharacterMugShotsAction
                     'imageable_type' => 'App\Models\GCharacter',
                     'g_image_id'     => $existingMugShots->firstWhere('origin_id', $record['mug_shot'])->image_id,
                     'collection'     => 'mug_shots',
-                    'created_at'     => Carbon::now(),
-                    'updated_at'     => Carbon::now(),
+                    'created_at'     => now(),
+                    'updated_at'     => now(),
                 ];
             });
 

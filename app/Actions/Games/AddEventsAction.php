@@ -21,7 +21,7 @@ class AddEventsAction
             DB::transaction(function () use (&$existingRecordsIds, &$existingGameVideosIds, &$existingGamesIds, $tableName, $localIdsName) {
                 $existingRecordsIds    = DB::table($tableName)->pluck($localIdsName)->toArray();
                 $existingGameVideosIds = DB::table('g_videos')->pluck('id')->toArray();
-                $existingGamesIds      = DB::table('games')->pluck('origin_id')->toArray();
+                $existingGamesIds      = DB::table('games')->pluck('id')->toArray();
             });
 
             $newRecords = array_filter($records, function ($record) use ($existingRecordsIds, &$skippedRecords) {

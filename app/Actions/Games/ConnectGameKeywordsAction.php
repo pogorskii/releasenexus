@@ -2,7 +2,6 @@
 
 namespace App\Actions\Games;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class ConnectGameKeywordsAction
@@ -11,11 +10,12 @@ class ConnectGameKeywordsAction
     {
         try {
             $writtenRecords     = 0;
+            $skippedRecords     = 0;
             $existingGameIds    = [];
             $existingKeywordIds = [];
 
             DB::transaction(function () use (&$existingGameIds, &$existingKeywordIds) {
-                $existingGameIds    = DB::table('games')->pluck('origin_id')->toArray();
+                $existingGameIds    = DB::table('games')->pluck('id')->toArray();
                 $existingKeywordIds = DB::table('g_keywords')->pluck('id')->toArray();
             });
 
@@ -34,8 +34,8 @@ class ConnectGameKeywordsAction
                     $pivotRecords[] = [
                         'game_id'      => $record['id'],
                         'g_keyword_id' => $keyword,
-                        'created_at'   => Carbon::now(),
-                        'updated_at'   => Carbon::now(),
+                        'created_at'   => now(),
+                        'updated_at'   => now(),
                     ];
                 }
             });

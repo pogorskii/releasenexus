@@ -16,7 +16,7 @@ class ConnectCompaniesFromInvolvedCompaniesAction
 
             DB::transaction(function () use (&$existingCompaniesIds, &$existingGamesIds) {
                 $existingCompaniesIds = DB::table('g_companies')->pluck('id')->toArray();
-                $existingGamesIds     = DB::table('games')->pluck('origin_id')->toArray();
+                $existingGamesIds     = DB::table('games')->pluck('id')->toArray();
             });
 
             $connectRecords = [];

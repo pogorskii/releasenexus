@@ -2,7 +2,6 @@
 
 namespace App\Actions\Games;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class AddCharacterMugShotsAction
@@ -16,14 +15,14 @@ class AddCharacterMugShotsAction
             $skippedRecords     = 0;
             $existingRecordsIds = [];
 
-            $recordsIds = collect($records)->pluck('image_id')->toArray();
+            $recordsIds = collect($records)->pluck('image_id');
 
             DB::transaction(function () use ($recordsIds, &$existingRecordsIds, $tableName, $localIdsName) {
-                $existingRecordsIds = DB::table($tableName)->whereIn('image_id', $recordsIds)->pluck($localIdsName)->toArray();
+                $existingRecordsIds = DB::table($tableName)->whereIn('image_id', $recordsIds)->pluck($localIdsName);
             });
 
-            $newRecords = array_filter($records, function ($record) use ($existingRecordsIds, &$skippedRecords) {
-                if (in_array($record['image_id'], $existingRecordsIds)) {
+            $newRecords = collect($records)->filter(function ($record) use ($existingRecordsIds, &$skippedRecords) {
+                if ($existingRecordsIds->contains($record['image_id'])) {
                     $skippedRecords++;
 
                     return false;
@@ -32,7 +31,7 @@ class AddCharacterMugShotsAction
                 return true;
             });
 
-            $transformedRecords = collect($newRecords)->map(function ($record) use ($localIdsName) {
+            $transformedRecords = $newRecords->map(function ($record) use ($localIdsName) {
                 return [
                     $localIdsName   => $record['id'],
                     'collection'    => 'mug_shots',
@@ -43,12 +42,12 @@ class AddCharacterMugShotsAction
                     'image_id'      => $record['image_id'],
                     'url'           => $record['url'],
                     'width'         => $record['width'] ?? null,
-                    'created_at'    => Carbon::now(),
-                    'updated_at'    => Carbon::now(),
+                    'created_at'    => now(),
+                    'updated_at'    => now(),
                 ];
-            })->toArray();
+            });
 
-            $result = DB::table($tableName)->insert($transformedRecords);
+            $result = DB::table($tableName)->insert($transformedRecords->toArray());
             if ($result) {
                 $writtenRecords += count($transformedRecords);
             }

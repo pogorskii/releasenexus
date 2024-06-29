@@ -27,7 +27,7 @@ class SeedAllGameTables extends Command
         try {
             $this->info('Initiated master game seeder...');
 
-            $this->call('igdb:seed-games');
+//            $this->call('igdb:seed-games');
             $this->call('igdb:seed-platforms');
             $this->call('igdb:seed-release-date-statuses');
             $this->call('igdb:seed-release-dates');
@@ -50,7 +50,7 @@ class SeedAllGameTables extends Command
             $this->call('igdb:connect-modes');
             $this->call('igdb:seed-themes');
             $this->call('igdb:connect-themes');
-            $this->call('igdb:seed-age-ratings');
+//            $this->call('igdb:seed-age-ratings');
             $this->call('igdb:connect-age-ratings');
             $this->call('igdb:seed-external-games');
             $this->call('igdb:seed-multiplayer-modes');
@@ -77,7 +77,7 @@ class SeedAllGameTables extends Command
             $this->call('igdb:seed-event-logos');
             $this->call('igdb:seed-game-websites');
             $this->call('igdb:seed-screenshots');
-            $this->call('igdb:connect-child-games');
+//            $this->call('igdb:connect-child-games');
 
             $this->newLine();
             $this->info('Finished seeding all game tables.');

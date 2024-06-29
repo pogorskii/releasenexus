@@ -2,7 +2,6 @@
 
 namespace App\Actions\Games;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class AddCoversAction
@@ -42,8 +41,8 @@ class AddCoversAction
                     'imageable_id'     => $record['game'] ?? null,
                     'imageable_type'   => 'App\Models\Game',
                     'collection'       => 'covers',
-                    'created_at'       => Carbon::now(),
-                    'updated_at'       => Carbon::now(),
+                    'created_at'       => now(),
+                    'updated_at'       => now(),
                 ];
 
                 return [
@@ -56,8 +55,8 @@ class AddCoversAction
                     'image_id'      => $record['image_id'],
                     'url'           => $record['url'],
                     'width'         => $record['width'] ?? null,
-                    'created_at'    => Carbon::now(),
-                    'updated_at'    => Carbon::now(),
+                    'created_at'    => now(),
+                    'updated_at'    => now(),
                 ];
             })->toArray();
 
