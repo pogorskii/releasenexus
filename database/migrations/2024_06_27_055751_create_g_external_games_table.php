@@ -36,7 +36,7 @@ return new class extends Migration {
             ])->nullable();
             $table->uuid('checksum');
             $table->json('countries')->nullable();
-            $table->foreignId('game_id')->nullable()->constrained('games', 'origin_id');
+            $table->foreignId('game_id')->nullable()->constrained('games');
             $table->enum('media', [1, 2])->nullable();
             $table->string('name')->nullable();
             $table->string('uid')->index()->nullable();

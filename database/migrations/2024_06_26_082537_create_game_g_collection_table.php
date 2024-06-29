@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('game_g_collection', function (Blueprint $table) {
             $table->id();
             $table->foreignId('g_collection_id')->constrained('g_collections');
-            $table->foreignId('game_id')->constrained('games', 'origin_id');
+            $table->foreignId('game_id')->constrained('games');
             $table->boolean('main_collection')->default(false);
             $table->enum('type', [0, 1])->nullable();
             $table->timestamps();

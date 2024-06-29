@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('game_g_age_rating', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('game_id')->constrained('games', 'origin_id');
+            $table->foreignId('game_id')->constrained('games');
             $table->foreignId('g_age_rating_id')->constrained('g_age_ratings');
             $table->timestamps();
         });

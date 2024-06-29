@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->boolean('campaign_coop')->nullable();
             $table->uuid('checksum');
             $table->boolean('drop_in')->nullable();
-            $table->foreignId('game_id')->nullable()->constrained('games', 'origin_id');
+            $table->foreignId('game_id')->nullable()->constrained('games');
             $table->boolean('lan_coop')->nullable();
             $table->boolean('offline_coop')->nullable();
             $table->unsignedInteger('offline_coop_max')->nullable();

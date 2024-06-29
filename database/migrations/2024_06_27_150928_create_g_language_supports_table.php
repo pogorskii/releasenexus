@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('g_language_supports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('game_id')->constrained('games', 'origin_id');
+            $table->foreignId('game_id')->constrained('games');
             $table->foreignId('g_language_id')->constrained('g_languages');
             $table->uuid('checksum');
             $table->enum('support_type', [1, 2, 3]);

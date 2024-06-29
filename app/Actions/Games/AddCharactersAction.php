@@ -2,7 +2,6 @@
 
 namespace App\Actions\Games;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class AddCharactersAction
@@ -15,7 +14,7 @@ class AddCharactersAction
             $writtenRecords      = 0;
             $skippedRecords      = 0;
             $existingRecordsIds  = [];
-            $allExistingGamesIds = DB::table('games')->pluck('origin_id')->toArray();
+            $allExistingGamesIds = DB::table('games')->pluck('id')->toArray();
 
             $recordsIds = collect($records)->pluck('id')->toArray();
 
@@ -46,8 +45,8 @@ class AddCharactersAction
                         $pivotRecords[] = [
                             'g_character_id' => $record['id'],
                             'game_id'        => $game,
-                            'created_at'     => Carbon::now(),
-                            'updated_at'     => Carbon::now(),
+                            'created_at'     => now(),
+                            'updated_at'     => now(),
                         ];
                     }
                 }
@@ -63,8 +62,8 @@ class AddCharactersAction
                     'slug'         => $record['slug'],
                     'species'      => array_key_exists('species', $record) ? number_format($record['species'], 0, '', '') : null,
                     'url'          => $record['url'],
-                    'created_at'   => Carbon::now(),
-                    'updated_at'   => Carbon::now(),
+                    'created_at'   => now(),
+                    'updated_at'   => now(),
                 ];
             })->toArray();
 

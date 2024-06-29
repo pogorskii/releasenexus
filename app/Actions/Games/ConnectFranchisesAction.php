@@ -2,7 +2,6 @@
 
 namespace App\Actions\Games;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class ConnectFranchisesAction
@@ -15,7 +14,7 @@ class ConnectFranchisesAction
             $existingFranchiseIds = [];
 
             DB::transaction(function () use (&$existingGameIds, &$existingFranchiseIds) {
-                $existingGameIds      = DB::table('games')->pluck('origin_id')->toArray();
+                $existingGameIds      = DB::table('games')->pluck('id')->toArray();
                 $existingFranchiseIds = DB::table('g_franchises')->pluck('id')->toArray();
             });
 
@@ -31,8 +30,8 @@ class ConnectFranchisesAction
                         'game_id'        => $record['id'],
                         'g_franchise_id' => $record['franchise'],
                         'main_franchise' => true,
-                        'created_at'     => Carbon::now(),
-                        'updated_at'     => Carbon::now(),
+                        'created_at'     => now(),
+                        'updated_at'     => now(),
                     ];
                 }
 
@@ -46,8 +45,8 @@ class ConnectFranchisesAction
                             'game_id'        => $record['id'],
                             'g_franchise_id' => $franchise,
                             'main_franchise' => false,
-                            'created_at'     => Carbon::now(),
-                            'updated_at'     => Carbon::now(),
+                            'created_at'     => now(),
+                            'updated_at'     => now(),
                         ];
                     }
                 }

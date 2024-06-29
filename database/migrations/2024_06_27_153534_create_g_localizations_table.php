@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('g_localizations', function (Blueprint $table) {
             $table->id();
             $table->uuid('checksum');
-            $table->foreignId('game_id')->constrained('games', 'origin_id');
+            $table->foreignId('game_id')->constrained('games');
             $table->string('name')->nullable();
             $table->foreignId('g_region_id')->constrained('g_regions');
             $table->timestamps();

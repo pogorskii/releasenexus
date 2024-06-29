@@ -12,7 +12,6 @@ return new class extends Migration {
     {
         Schema::create('games', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('origin_id')->unique();
             $table->float('aggregated_rating')->nullable();
             $table->unsignedInteger('aggregated_rating_count')->nullable();
             $table->json('alternative_names')->nullable();
@@ -20,10 +19,10 @@ return new class extends Migration {
             $table->string('checksum')->nullable();
             $table->dateTime('first_release_date')->nullable();
             $table->unsignedInteger('hypes')->default(0);
-            $table->string('name');
+            $table->string('name')->index();
             $table->float('rating')->default(0);
             $table->unsignedInteger('rating_count')->default(0);
-            $table->string('slug');
+            $table->string('slug')->unique();
             $table->enum('status', [0, 2, 3, 4, 5, 6, 7, 8])->nullable();
             $table->text('storyline')->nullable();
             $table->text('summary')->nullable();
@@ -32,8 +31,10 @@ return new class extends Migration {
             $table->unsignedInteger('total_rating_count')->default(0);
             $table->string('url');
             $table->string('version_title')->nullable();
-            $table->dateTime('synced_at')->nullable();
+            $table->foreignId('version_parent_id')->nullable()->constrained('games');
+            $table->foreignId('parent_game_id')->nullable()->constrained('games');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
