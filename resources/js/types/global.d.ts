@@ -3,8 +3,6 @@ import {AxiosInstance} from "axios";
 import ziggyRoute, {Config as ZiggyConfig} from "ziggy-js";
 import {PageProps as AppPageProps} from "./";
 
-import routeFn from "ziggy-js";
-
 declare global {
     const route: typeof routeFn;
 
