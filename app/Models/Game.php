@@ -41,17 +41,17 @@ class Game extends Model
 
     public function releaseDates(): MorphMany
     {
-        return $this->morphMany(GReleaseDate::class, 'dateable', 'dateable_type', 'dateable_id', 'origin_id');
+        return $this->morphMany(GReleaseDate::class, 'dateable', 'dateable_type', 'dateable_id');
     }
 
     public function covers(): MorphMany
     {
-        return $this->morphMany(GImageable::class, 'covers', 'imageable_type', 'imageable_id', 'origin_id')->where('collection', 'covers');
+        return $this->morphMany(GImageable::class, 'covers', 'imageable_type', 'imageable_id')->where('collection', 'covers');
     }
 
     public function platforms(): HasManyThrough
     {
-        return $this->hasManyThrough(GPlatform::class, GReleaseDate::class, 'dateable_id', 'origin_id', 'origin_id', 'platform_id');
+        return $this->hasManyThrough(GPlatform::class, GReleaseDate::class, 'dateable_id', 'origin_id', 'id', 'platform_id');
     }
 
     public function franchises(): BelongsToMany

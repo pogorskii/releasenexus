@@ -34,6 +34,6 @@ class GReleaseDate extends Model
 
     public function dateable(): MorphTo
     {
-        return $this->morphTo('dateable', 'dateable_type', 'dateable_id', 'origin_id');
+        return $this->morphTo('dateable', 'dateable_type', 'dateable_id', 'id');
     }
 }

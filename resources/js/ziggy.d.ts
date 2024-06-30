@@ -5,8 +5,47 @@ declare module 'ziggy-js' {
     "ignition.healthCheck": [],
     "ignition.executeSolution": [],
     "ignition.updateConfig": [],
+    "dashboard": [],
+    "get-csv": [],
+    "games.index": [
+        {
+            "name": "year",
+            "required": true
+        },
+        {
+            "name": "month",
+            "required": true
+        }
+    ],
+    "profile.edit": [],
+    "profile.update": [],
+    "profile.destroy": [],
+    "register": [],
     "login": [],
-    "home": []
+    "password.request": [],
+    "password.email": [],
+    "password.reset": [
+        {
+            "name": "token",
+            "required": true
+        }
+    ],
+    "password.store": [],
+    "verification.notice": [],
+    "verification.verify": [
+        {
+            "name": "id",
+            "required": true
+        },
+        {
+            "name": "hash",
+            "required": true
+        }
+    ],
+    "verification.send": [],
+    "password.confirm": [],
+    "password.update": [],
+    "logout": []
 }
 }
 export {};

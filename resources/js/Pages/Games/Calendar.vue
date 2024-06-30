@@ -1,12 +1,20 @@
 <script setup lang="ts">
 import {InertiaLink} from "@inertiajs/inertia-vue3";
+import {computed, onMounted, ref} from "vue";
 
 const props = defineProps<{
     datedReleases: Array<any>;
     tbdReleases: Array<any>;
 }>()
 
-const {year, month} = route().params;
+let year = 2022;
+let month = 6;
+
+onMounted(() => {
+    const params = route();
+    year = Number(params.params.year);
+    month = Number(params.params.month);
+});
 
 const monthsMap: {
     [key: number]: string;
@@ -25,21 +33,6 @@ const monthsMap: {
     12: 'December',
 };
 
-// main_game	0
-// dlc_addon	1
-// expansion	2
-// bundle	3
-// standalone_expansion	4
-// mod	5
-// episode	6
-// season	7
-// remake	8
-// remaster	9
-// expanded_game	10
-// port	11
-// fork	12
-// pack	13
-// update	14
 const gameTypeMap: {
     [key: number]: string;
 } = {
@@ -60,12 +53,26 @@ const gameTypeMap: {
     14: 'Update',
 };
 
-// Function to convert date to a string
+const selectedRegion = ref<number>(8);
+
 const formatDate = (date: string): string => {
     return new Date(date).toLocaleDateString('en-US', {month: 'long', day: 'numeric'});
 };
 
 const darkMode = true;
+
+// filter by region
+const filteredReleases = computed(() => {
+    return props.datedReleases.map(({date, releases}) => {
+        return {
+            date,
+            releases: releases.filter((release) => {
+                const matchingReleaseDates = release.release_dates.filter((releaseDate) => releaseDate.region == selectedRegion.value);
+                return matchingReleaseDates.length > 0;
+            })
+        }
+    });
+});
 
 // TODO: Handle different regions
 </script>
@@ -83,7 +90,7 @@ const darkMode = true;
             </InertiaLink>
         </div>
         <div class="grid grid-cols-1 gap-4">
-            <div v-for="day in datedReleases"
+            <div v-for="day in filteredReleases"
                  class="bg-white dark:bg-black p-6 flex gap-6">
                 <div>
                     <h2 class="text-2xl font-semibold whitespace-nowrap border-b pb-2">{{ formatDate(day.date) }}</h2>
@@ -106,22 +113,23 @@ const darkMode = true;
                         </div>
                         <div class="flex grow flex-col p-6 pb-3">
                             <h3 class="mb-2 font-semibold text-xl leading-tight">
-                                <InertiaLink
-                                    class="hover:text-primary hover:underline hover:decoration-solid hover:underline-offset-4">{{ release.game.name }}
-                                </InertiaLink>
+                                <!--                                <InertiaLink-->
+                                <!--                                    class="hover:text-primary hover:underline hover:decoration-solid hover:underline-offset-4">{{ release.game.name }}-->
+                                <!--                                </InertiaLink>-->
                             </h3>
                             <div
                                 class="w-full h-[1px] bg-primary mb-2 dark:[box-shadow:0_0_10px_1px_hsl(var(--primary))]"></div>
                             <div class="mb-auto inline-flex flex-wrap gap-2 self-start">
-                                <div v-for="releaseDate in release.release_dates.filter(r => r.region == 8)"
-                                     class="text-sm">
+                                <div
+                                    v-for="releaseDate in release.release_dates.filter((releaseDate) => releaseDate.region == selectedRegion)"
+                                    class="text-sm">
                                     {{ releaseDate.platform.abbreviation ?? releaseDate.platform.name }}
                                 </div>
                             </div>
                         </div>
-                        <InertiaLink
-                            class="px-4 py-2 block bg-primary/70 hover:bg-primary w-full font-semibold text-center transition-colors duration-100 dark:[box-shadow:0_-20px_10px_-20px_hsl(var(--primary))_inset,-20px_0px_10px_-20px_hsl(var(--primary))_inset,20px_0_10px_-20px_hsl(var(--primary))_inset]">More info &rarr;
-                        </InertiaLink>
+                        <!--                        <InertiaLink-->
+                        <!--                            class="px-4 py-2 block bg-primary/70 hover:bg-primary w-full font-semibold text-center transition-colors duration-100 dark:[box-shadow:0_-20px_10px_-20px_hsl(var(&#45;&#45;primary))_inset,-20px_0px_10px_-20px_hsl(var(&#45;&#45;primary))_inset,20px_0_10px_-20px_hsl(var(&#45;&#45;primary))_inset]">More info &rarr;-->
+                        <!--                        </InertiaLink>-->
                     </div>
                 </div>
             </div>
