@@ -1,20 +1,15 @@
 <script setup lang="ts">
 import {InertiaLink} from "@inertiajs/inertia-vue3";
-import {computed, onMounted, ref} from "vue";
+import {computed, ref} from "vue";
 
 const props = defineProps<{
     datedReleases: Array<any>;
     tbdReleases: Array<any>;
+    params: {
+        year: string;
+        month: string;
+    }
 }>()
-
-let year = 2022;
-let month = 6;
-
-onMounted(() => {
-    const params = route();
-    year = Number(params.params.year);
-    month = Number(params.params.month);
-});
 
 const monthsMap: {
     [key: number]: string;
@@ -80,12 +75,12 @@ const filteredReleases = computed(() => {
     <div class="bg-black w-full min-w-full" :class="{ dark: darkMode }">
         <div class="flex gap-10">
             <InertiaLink
-                :href="`/games/calendar/${year}/${Number(month) - 1}`"
+                :href="`/games/calendar/${params.year}/${Number(params.month) - 1}`"
                 class="px-4 py-2 block bg-purple-400 w-full font-semibold text-center">Previous month
             </InertiaLink>
-            <h1 class="text-2xl font-semibold whitespace-nowrap">Games releasing in {{ monthsMap[Number(month)] }} {{ year }}</h1>
+            <h1 class="text-2xl font-semibold whitespace-nowrap">Games releasing in {{ monthsMap[Number(params.month)] }} {{ params.year }}</h1>
             <InertiaLink
-                :href="`/games/calendar/${year}/${Number(month) + 1}`"
+                :href="`/games/calendar/${params.year}/${Number(params.month) + 1}`"
                 class="px-4 py-2 block bg-purple-400 w-full font-semibold text-center">Next month
             </InertiaLink>
         </div>
@@ -113,9 +108,9 @@ const filteredReleases = computed(() => {
                         </div>
                         <div class="flex grow flex-col p-6 pb-3">
                             <h3 class="mb-2 font-semibold text-xl leading-tight">
-                                <!--                                <InertiaLink-->
-                                <!--                                    class="hover:text-primary hover:underline hover:decoration-solid hover:underline-offset-4">{{ release.game.name }}-->
-                                <!--                                </InertiaLink>-->
+                                <InertiaLink
+                                    class="hover:text-primary hover:underline hover:decoration-solid hover:underline-offset-4">{{ release.game.name }}
+                                </InertiaLink>
                             </h3>
                             <div
                                 class="w-full h-[1px] bg-primary mb-2 dark:[box-shadow:0_0_10px_1px_hsl(var(--primary))]"></div>
@@ -127,9 +122,9 @@ const filteredReleases = computed(() => {
                                 </div>
                             </div>
                         </div>
-                        <!--                        <InertiaLink-->
-                        <!--                            class="px-4 py-2 block bg-primary/70 hover:bg-primary w-full font-semibold text-center transition-colors duration-100 dark:[box-shadow:0_-20px_10px_-20px_hsl(var(&#45;&#45;primary))_inset,-20px_0px_10px_-20px_hsl(var(&#45;&#45;primary))_inset,20px_0_10px_-20px_hsl(var(&#45;&#45;primary))_inset]">More info &rarr;-->
-                        <!--                        </InertiaLink>-->
+                        <InertiaLink
+                            class="px-4 py-2 block bg-primary/70 hover:bg-primary w-full font-semibold text-center transition-colors duration-100 dark:[box-shadow:0_-20px_10px_-20px_hsl(var(--primary))_inset,-20px_0px_10px_-20px_hsl(var(--primary))_inset,20px_0_10px_-20px_hsl(var(--primary))_inset]">More info &rarr;
+                        </InertiaLink>
                     </div>
                 </div>
             </div>

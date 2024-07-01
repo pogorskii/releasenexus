@@ -10,20 +10,22 @@ class AddReleaseDatesAction
     public static function execute(array $records): array
     {
         try {
-            $tableName          = 'g_release_dates';
-            $localIdsName       = 'origin_id';
-            $writtenRecords     = 0;
-            $skippedRecords     = 0;
-            $existingRecordsIds = [];
+            $tableName         = 'g_release_dates';
+            $localIdsName      = 'origin_id';
+            $writtenRecords    = 0;
+            $skippedRecords    = 0;
+            $existingRecordIds = collect();
+            $existingGameIds   = collect();
 
-            $recordsIds = collect($records)->pluck('id')->toArray();
+            $recordsIds = collect($records)->pluck('id');
 
-            DB::transaction(function () use ($recordsIds, &$existingRecordsIds, $tableName, $localIdsName) {
-                $existingRecordsIds = DB::table($tableName)->whereIn($localIdsName, $recordsIds)->pluck($localIdsName)->toArray();
+            DB::transaction(function () use ($recordsIds, &$existingRecordIds, &$existingGameIds, $tableName, $localIdsName) {
+                $existingRecordIds = DB::table($tableName)->whereIn($localIdsName, $recordsIds)->pluck($localIdsName);
+                $existingGameIds   = DB::table('games')->pluck('id');
             });
 
-            $newRecords = array_filter($records, function ($record) use ($existingRecordsIds, &$skippedRecords) {
-                if (in_array($record['id'], $existingRecordsIds)) {
+            $newRecords = collect($records)->filter(function ($record) use ($existingRecordIds, &$skippedRecords) {
+                if ($existingRecordIds->contains($record['id'])) {
                     $skippedRecords++;
 
                     return false;
@@ -32,26 +34,28 @@ class AddReleaseDatesAction
                 return true;
             });
 
-            $transformedRecords = collect($newRecords)->map(function ($record) use ($localIdsName) {
+            $transformedRecords = $newRecords->map(function ($record) use ($localIdsName, $existingGameIds) {
+                $safeGameId = array_key_exists('game', $record) && $existingGameIds->contains($record['game']) ? $record['game'] : null;
+
                 return [
                     $localIdsName   => $record['id'],
                     'category'      => array_key_exists('category', $record) ? number_format($record['category'], 0, '', '') : null,
                     'checksum'      => $record['checksum'],
-                    'created_at'    => Carbon::createFromTimestamp($record['created_at'])->toDateTimeString(),
                     'date'          => array_key_exists('date', $record) ? Carbon::createFromTimestamp($record['date'])->toDateTimeString() : null,
                     'human'         => $record['human'] ?? null,
                     'm'             => $record['m'] ?? null,
                     'region'        => array_key_exists('region', $record) ? number_format($record['region'], 0, '', '') : null,
                     'status_id'     => $record['status'] ?? null,
-                    'updated_at'    => Carbon::createFromTimestamp($record['updated_at'])->toDateTimeString(),
                     'y'             => $record['y'] ?? null,
                     'platform_id'   => $record['platform'] ?? null,
-                    'dateable_id'   => $record['game'] ?? null,
+                    'dateable_id'   => $safeGameId,
                     'dateable_type' => $record['game'] ? 'App\Models\Game' : null,
+                    'updated_at'    => now(),
+                    'created_at'    => now(),
                 ];
-            })->toArray();
+            });
 
-            $result = DB::table($tableName)->insert($transformedRecords);
+            $result = DB::table($tableName)->insert($transformedRecords->toArray());
             if ($result) {
                 $writtenRecords += count($transformedRecords);
             }
